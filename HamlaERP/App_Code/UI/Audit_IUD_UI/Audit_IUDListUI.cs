@@ -4,11 +4,10 @@ using System.Linq;
 using System.Web;
 
 /// <summary>
-/// Summary description for Audit_UIDLis
-/// </summary>
-public class Audit_UIDList
+/// Summary description for Audit_IUDListUI./// </summary>
+public class Audit_IUDListUI
 {
-    public Audit_UIDList()
+    public Audit_IUDListUI()
     {
         //
         // TODO: Add constructor logic here

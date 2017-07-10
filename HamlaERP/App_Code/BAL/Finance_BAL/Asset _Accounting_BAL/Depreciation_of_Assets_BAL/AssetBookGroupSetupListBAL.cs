@@ -30,7 +30,7 @@ public class AssetBookGroupSetupListBAL
         dtb = assetBookGroupSetupListDAL.GetAssetBookGroupSetupListById(assetBookGroupSetupListUI);
         return dtb;
     }
-
+   
     public DataTable GetAssetBookGroupSetupListBySearchParameters(AssetBookGroupSetupListUI assetBookGroupSetupListUI)
     {
         DataTable dtb = new DataTable();

@@ -44,7 +44,12 @@ public class AssetBookSetupListBAL
         result = assetBookSetupListDAL.DeleteAssetBookSetup(assetBookSetupListUI);
         return result;
     }
-
+    public DataTable GetAssetBookSetupListForRecordId(AssetBookSetupListUI assetBookSetupListUI)
+    {
+        DataTable dtb = new DataTable();
+        dtb = assetBookSetupListDAL.GetAssetBookSetupListForRecordId(assetBookSetupListUI);
+        return dtb;
+    }
     public DataTable GetAssetBookSetupListForExportToExcel()
     {
         DataTable dtb = new DataTable();

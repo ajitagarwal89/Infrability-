@@ -123,6 +123,48 @@ public class AssetBookSetupListDAL
 
     }
 
+    public DataTable GetAssetBookSetupListForRecordId(AssetBookSetupListUI assetBookSetupListUI)
+    {
+        DataSet ds = new DataSet();
+        DataTable dtb = new DataTable();
+        //Boolean result = false;
+        try
+        {
+            using (SqlConnection SupportCon = new SqlConnection(connectionString))
+            {
+                SqlCommand sqlCmd = new SqlCommand("SP_AssetBookSetup_SelectForRecordId", SupportCon);
+                sqlCmd.CommandType = CommandType.StoredProcedure;
+                sqlCmd.CommandTimeout = commandTimeout;
+
+                sqlCmd.Parameters.Add("@tbl_OrganizationId", SqlDbType.NVarChar);
+                sqlCmd.Parameters["@tbl_OrganizationId"].Value = assetBookSetupListUI.Tbl_OrganizationId;
+
+                using (SqlDataAdapter adapter = new SqlDataAdapter(sqlCmd))
+                {
+                    adapter.Fill(ds);
+                }
+            }
+            if (ds.Tables.Count > 0)
+                dtb = ds.Tables[0];
+        }
+        catch (Exception exp)
+        {
+            logExcpUIobj.MethodName = "GetListForRecordId()";
+            logExcpUIobj.ResourceName = "AssetBookSetupListDAL.CS";
+            logExcpUIobj.RecordId = "Search = " + assetBookSetupListUI.Tbl_OrganizationId;
+            logExcpUIobj.ExceptionDetails = "Error Occured. System Generated Error is: " + exp.ToString();
+            logExcpDALobj.SaveExceptionToDB(logExcpUIobj);
+
+            log.Error("[AssetBookSetupListDAL : GetAssetBookSetupListSearchParameters] An error occured in the processing of Record Search = " + assetBookSetupListUI.Tbl_OrganizationId + " . Details : [" + exp.ToString() + "]");
+        }
+        finally
+        {
+            ds.Dispose();
+        }
+
+
+        return dtb;
+    }
     public DataTable GetAssetBookSetupListSearchParameters(AssetBookSetupListUI assetBookSetupListUI)
     {
 

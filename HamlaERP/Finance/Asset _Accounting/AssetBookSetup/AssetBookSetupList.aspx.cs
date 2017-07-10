@@ -5,6 +5,8 @@ using System.Web.UI.WebControls;
 using System.Data;
 using Finware;
 using log4net;
+using AuditWS;
+using Enums;
 public partial class Assets_AssetBookSetup_AssetBookSetupList : System.Web.UI.Page
 {
     #region Data Members
@@ -13,7 +15,7 @@ public partial class Assets_AssetBookSetup_AssetBookSetupList : System.Web.UI.Pa
     protected static readonly ILog log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
     AssetBookSetupListBAL assetBookSetupListBAL = new AssetBookSetupListBAL();
     AssetBookSetupListUI assetBookSetupListUI = new AssetBookSetupListUI();
-
+    AuditWSSoapClient auditWSSoapClient = new AuditWSSoapClient();
 
     #endregion Data Members
 
@@ -36,6 +38,18 @@ public partial class Assets_AssetBookSetup_AssetBookSetupList : System.Web.UI.Pa
         string assetBookSetupId = (sender as LinkButton).CommandArgument;
         Response.Redirect("AssetBookSetupForm.aspx?AssetBookSetupId=" + assetBookSetupId);
     }
+    public void webserviceDelete()
+    {
+        auditWSSoapClient.Audit_IUD(SessionContext.OrganizationId,
+              "tbl_AssetBookSetup",
+              Request.QueryString["AssetBookSetupId"],
+              SessionContext.UserGuid,
+              (int)Enums.CommonEnum.Operation.Delete,
+              "",
+              "",
+              "192.168.1.120",
+              HttpContext.Current.Request.Browser.Browser);
+    }
 
     protected void btnDelete_Click(object sender, EventArgs e)
     {
@@ -52,6 +66,7 @@ public partial class Assets_AssetBookSetup_AssetBookSetupList : System.Web.UI.Pa
 
                     if (assetBookSetupListBAL.DeleteAssetBookSetup(assetBookSetupListUI) == 1)
                     {
+                        webserviceDelete();
                         divSuccess.Visible = true;
                         divError.Visible = false;
                         lblSuccess.Text = Resources.GlobalResource.msgRecordDeleteSuccessfully;

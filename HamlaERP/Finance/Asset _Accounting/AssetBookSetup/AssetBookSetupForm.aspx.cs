@@ -18,9 +18,12 @@ public partial class Assets_AssetBookSetup_AssetBookSetupForm : System.Web.UI.Pa
     LogException logExcpDALobj = new LogException();
     Audit_IUDFormUI audit_IUDFormUI = new Audit_IUDFormUI();
     AssetBookSetupFormBAL assetBookSetupFormBAL = new AssetBookSetupFormBAL();
+    AssetBookSetupListBAL assetBookSetupListBAL = new AssetBookSetupListBAL();
     AssetBookSetupFormUI assetBookSetupFormUI = new AssetBookSetupFormUI();
     OptionSetListBAL optionSetListBAL = new OptionSetListBAL();
     AuditWSSoapClient auditWSSoapClient = new AuditWSSoapClient();
+    Audit_IUDListBAL audit_IUDListBAL = new Audit_IUDListBAL();
+    Audit_IUDListUI audit_IUDListUI = new Audit_IUDListUI();
 
     #endregion Data Members
 
@@ -67,12 +70,14 @@ public partial class Assets_AssetBookSetup_AssetBookSetupForm : System.Web.UI.Pa
         string NewValue = "";
         try
         {
-            DataTable dtb = assetBookSetupFormBAL.GetAssetBookSetupListById(assetBookSetupFormUI);
+            audit_IUDListUI.Tbl_RecordId = Request.QueryString["AssetBookSetupId"];
+            audit_IUDListUI.TableName = "tbl_AssetBookSetup";
+               DataTable dtb = audit_IUDListBAL.GetAuidtListByRecordIDAndTableName(audit_IUDListUI);
 
             if (dtb.Rows.Count > 0)
             {
 
-                oldvalue = dtb.Rows[0]["AssetBookSetupCode"].ToString() + Enums.CommonEnum.Separator.Comma+dtb.Rows[0]["Description"].ToString();
+                oldvalue = dtb.Rows[0]["OldValue"].ToString();
             }
             else
             {
@@ -86,10 +91,10 @@ public partial class Assets_AssetBookSetup_AssetBookSetupForm : System.Web.UI.Pa
             throw exp;
         }
 
-        NewValue = (txtDescription.Text + "," + txtAssetBookSetupCode.Text).ToString();
+        NewValue = (txtDescription.Text + "," + txtAssetBookSetupCode.Text +"," +ddlopt_CurrentyFiscalYear.SelectedItem +","+ ddlopt_DepreciatedPeriod.SelectedItem).ToString();
         auditWSSoapClient.Audit_IUD(SessionContext.OrganizationId,
              "tbl_AssetBookSetup",
-             "00000000-0000-0000-0000-000000000001",
+             Request.QueryString["AssetBookSetupId"],
              SessionContext.UserGuid,
              (int)Enums.CommonEnum.Operation.Insert,
              oldvalue,
@@ -99,17 +104,57 @@ public partial class Assets_AssetBookSetup_AssetBookSetupForm : System.Web.UI.Pa
     }
     public void webserviceInsert()
     {
+        string NewValue = "";
+        NewValue = ( txtAssetBookSetupCode.Text + ","+txtDescription.Text + ","  + ddlopt_CurrentyFiscalYear.SelectedItem + "," + ddlopt_DepreciatedPeriod.SelectedItem).ToString();
+        string RecordId = "";
+        try
+        {
+            AssetBookSetupListUI assetBookSetupListUI = new AssetBookSetupListUI();
+
+            assetBookSetupListUI.Tbl_OrganizationId = SessionContext.OrganizationId;
+           
+            DataTable dtb = assetBookSetupListBAL.GetAssetBookSetupListForRecordId(assetBookSetupListUI);
+
+            if (dtb.Rows.Count > 0)
+            {
+
+                RecordId = dtb.Rows[0]["tbl_AssetBookSetupId"].ToString();
+            }
+            else
+            {
+                lblError.Text = Resources.GlobalResource.msgCouldNotLoadData;
+                divError.Visible = true;
+            }
+
+        }
+        catch (Exception exp)
+        {
+            throw exp;
+        }
+
         auditWSSoapClient.Audit_IUD(SessionContext.OrganizationId,
-             "AssetBookSetup",
-             "00000000-0000-0000-0000-000000000001",
+             "tbl_AssetBookSetup",
+             RecordId,
              SessionContext.UserGuid,
              (int)Enums.CommonEnum.Operation.Insert,
-             txtDescription.Text,
-             "",
+                          "",
+                          NewValue,
              "192.168.1.120",
              HttpContext.Current.Request.Browser.Browser);
 
 
+    }
+    public void webserviceDelete()
+    {
+        auditWSSoapClient.Audit_IUD(SessionContext.OrganizationId,
+              "tbl_AssetBookSetup",
+              Request.QueryString["AssetBookSetupId"],
+              SessionContext.UserGuid,
+              (int)Enums.CommonEnum.Operation.Delete,
+              "",
+              "",
+              "192.168.1.120",
+              HttpContext.Current.Request.Browser.Browser);
     }
 
     protected void btnSave_Click(object sender, EventArgs e)
@@ -127,9 +172,10 @@ public partial class Assets_AssetBookSetup_AssetBookSetupForm : System.Web.UI.Pa
 
             if (assetBookSetupFormBAL.AddAssetBookSetup(assetBookSetupFormUI) == 1)
             {
+                webserviceInsert();
                 divSuccess.Visible = true;
                 lblSuccess.Text = Resources.GlobalResource.msgRecordInsertedSuccessfully;
-                webserviceInsert();
+           
                 this.Page.ClientScript.RegisterStartupScript(this.GetType(), "clearform", "ClearForm();", true);
             }
             else

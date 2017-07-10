@@ -78,5 +78,46 @@ public class Audit_IUDListDAL
         return dtbl;
 
     }
+    public DataTable GetAuidtListByRecordIDAndTableName(Audit_IUDListUI audit_IUDListUI)
+    {
+        DataSet ds = new DataSet();
+        DataTable dtbl = new DataTable();
+               try
+        {
+            using (SqlConnection SupportCon = new SqlConnection(connectionString))
+            {
+                SqlCommand sqlCmd = new SqlCommand("SP_Audit_SelectByRecordIDAndTableName", SupportCon);
+                sqlCmd.CommandType = CommandType.StoredProcedure;
+                sqlCmd.CommandTimeout = commandTimeout;
 
+                sqlCmd.Parameters.Add("@Tbl_RecordId", SqlDbType.NVarChar);
+                sqlCmd.Parameters["@Tbl_RecordId"].Value = audit_IUDListUI.Tbl_RecordId;
+
+                sqlCmd.Parameters.Add("@TableName", SqlDbType.NVarChar);
+                sqlCmd.Parameters["@TableName"].Value = audit_IUDListUI.TableName;
+
+                using (SqlDataAdapter adapter = new SqlDataAdapter(sqlCmd))
+                {
+                    adapter.Fill(ds);
+                }
+            }
+            if (ds.Tables.Count > 0)
+                dtbl = ds.Tables[0];
+        }
+        catch (Exception exp)
+        {
+            logExcpUIobj.MethodName = "GetAuidtListByRecordIDAndTableName()";
+            logExcpUIobj.ResourceName = "Audit_IUDListDAL.CS";
+            //logExcpUIobj.RecordId = "Search = " + employeeGroupListUI.Search;
+            logExcpUIobj.ExceptionDetails = "Error Occured. System Generated Error is: " + exp.ToString();
+            logExcpDALobj.SaveExceptionToDB(logExcpUIobj);
+
+           // log.Error("[EmployeeGroupListDAL : GetAuidtListByRecordIDAndTableName] An error occured in the processing of Record Search = " + employeeGroupListUI.Search + " . Details : [" + exp.ToString() + "]");
+        }
+        finally
+        {
+            ds.Dispose();
+        }
+        return dtbl;
+    }
 }
