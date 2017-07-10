@@ -1,0 +1,69 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "HamlaERP", "HamlaERP\", "{6732779E-DE0D-44B8-946C-FDEB7189772C}"
+	ProjectSection(WebsiteProperties) = preProject
+		TargetFrameworkMoniker = ".NETFramework,Version%3Dv4.5"
+		ProjectReferences = "{8483dfbc-bc59-4fa1-a31b-3c7400073357}|Infra.Security.AESEncryptionLibrary.dll;{43373764-0b36-457d-9a8c-17ecd6e53e18}|Infra.SecuritySystem.dll;{f638eec6-b491-4f32-9045-02fc987ed0c3}|InfrERPWS.dll;"
+		Debug.AspNetCompiler.VirtualPath = "/localhost_52641"
+		Debug.AspNetCompiler.PhysicalPath = "HamlaERP\"
+		Debug.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_52641\"
+		Debug.AspNetCompiler.Updateable = "true"
+		Debug.AspNetCompiler.ForceOverwrite = "true"
+		Debug.AspNetCompiler.FixedNames = "false"
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.VirtualPath = "/localhost_52641"
+		Release.AspNetCompiler.PhysicalPath = "HamlaERP\"
+		Release.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_52641\"
+		Release.AspNetCompiler.Updateable = "true"
+		Release.AspNetCompiler.ForceOverwrite = "true"
+		Release.AspNetCompiler.FixedNames = "false"
+		Release.AspNetCompiler.Debug = "False"
+		VWDPort = "52641"
+		SlnRelativePath = "HamlaERP\"
+	EndProjectSection
+	ProjectSection(ProjectDependencies) = postProject
+		{F638EEC6-B491-4F32-9045-02FC987ED0C3} = {F638EEC6-B491-4F32-9045-02FC987ED0C3}
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Infra.SecuritySystem", "Infra.SecuritySystem\Infra.SecuritySystem.csproj", "{43373764-0B36-457D-9A8C-17ECD6E53E18}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Infra.Security.AESEncryptionLibrary", "Infra.Security.AESEncryptionLibrary\Infra.Security.AESEncryptionLibrary.csproj", "{8483DFBC-BC59-4FA1-A31B-3C7400073357}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Infra.Security.AESEncryptionUtility", "Infra.Security.AESEncryptionUtility\Infra.Security.AESEncryptionUtility.csproj", "{8EF3440B-FC84-47E7-BF00-9B07774C0AE3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InfrERPWS", "InfrERPWS\InfrERPWS.csproj", "{F638EEC6-B491-4F32-9045-02FC987ED0C3}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{6732779E-DE0D-44B8-946C-FDEB7189772C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6732779E-DE0D-44B8-946C-FDEB7189772C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6732779E-DE0D-44B8-946C-FDEB7189772C}.Release|Any CPU.ActiveCfg = Debug|Any CPU
+		{6732779E-DE0D-44B8-946C-FDEB7189772C}.Release|Any CPU.Build.0 = Debug|Any CPU
+		{43373764-0B36-457D-9A8C-17ECD6E53E18}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{43373764-0B36-457D-9A8C-17ECD6E53E18}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{43373764-0B36-457D-9A8C-17ECD6E53E18}.Release|Any CPU.ActiveCfg = Debug|Any CPU
+		{43373764-0B36-457D-9A8C-17ECD6E53E18}.Release|Any CPU.Build.0 = Debug|Any CPU
+		{8483DFBC-BC59-4FA1-A31B-3C7400073357}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8483DFBC-BC59-4FA1-A31B-3C7400073357}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8483DFBC-BC59-4FA1-A31B-3C7400073357}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8483DFBC-BC59-4FA1-A31B-3C7400073357}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8EF3440B-FC84-47E7-BF00-9B07774C0AE3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8EF3440B-FC84-47E7-BF00-9B07774C0AE3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8EF3440B-FC84-47E7-BF00-9B07774C0AE3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8EF3440B-FC84-47E7-BF00-9B07774C0AE3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F638EEC6-B491-4F32-9045-02FC987ED0C3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F638EEC6-B491-4F32-9045-02FC987ED0C3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F638EEC6-B491-4F32-9045-02FC987ED0C3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F638EEC6-B491-4F32-9045-02FC987ED0C3}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

@@ -1,0 +1,57 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using System.Data;
+
+
+/// <summary>
+/// Summary description for FiscalPeriodSetupListBLL
+/// </summary>
+public class FiscalPeriodSetupListBAL
+{
+    FiscalPeriodSetupListDAL fiscalPeriodSetupListDAL = new FiscalPeriodSetupListDAL();
+
+    public FiscalPeriodSetupListBAL()
+    {
+        //
+        // TODO: Add constructor logic here
+        //
+    }
+
+    public DataTable GetFiscalPeriodSetupList()
+    {
+        DataTable dtb = new DataTable();
+        dtb = fiscalPeriodSetupListDAL.GetFiscalPeriodSetupList();
+        return dtb;
+    }
+
+    public DataTable GetFiscalPeriodSetupListById(FiscalPeriodSetupListUI fiscalPeriodSetupListUI)
+    {
+        DataTable dtb = new DataTable();
+        dtb = fiscalPeriodSetupListDAL.GetFiscalPeriodSetupListById(fiscalPeriodSetupListUI);
+        return dtb;
+    }
+
+    public DataTable GetFiscalPeriodSetupListBySearchParameters(FiscalPeriodSetupListUI fiscalPeriodSetupListUI)
+    {
+        DataTable dtb = new DataTable();
+        dtb = fiscalPeriodSetupListDAL.GetFiscalPeriodSetupListBySearchParameters(fiscalPeriodSetupListUI);
+        return dtb;
+    }
+
+    public int DeleteFiscalPeriodSetup(FiscalPeriodSetupListUI fiscalPeriodSetupListUI)
+    {
+        int result = 0;
+        result = fiscalPeriodSetupListDAL.DeleteFiscalPeriodSetup(fiscalPeriodSetupListUI);
+        return result;
+    }
+
+    public DataTable GetFiscalPeriodSetupListForExportToExcel()
+    {
+        DataTable dtb = new DataTable();
+        dtb = fiscalPeriodSetupListDAL.GetFiscalPeriodSetupListForExportToExcel();
+        return dtb;
+    }
+
+}

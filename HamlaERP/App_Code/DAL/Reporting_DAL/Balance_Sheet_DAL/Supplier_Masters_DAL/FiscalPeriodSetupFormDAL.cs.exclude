@@ -1,0 +1,237 @@
+﻿using System;
+using System.Data.SqlClient;
+using System.Data;
+using log4net;
+
+
+/// <summary>
+/// Summary description for FiscalPeriodSetupFormDAL
+/// </summary>
+public class FiscalPeriodSetupFormDAL
+{
+    string connectionString = string.Empty;
+    int commandTimeout = 0;
+    LogExceptionUI logExcpUIobj = new LogExceptionUI();
+    LogException logExcpDALobj = new LogException();
+    protected static readonly ILog log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
+    public FiscalPeriodSetupFormDAL()
+    {
+        try
+        {
+            GlobalConfigurations objConfig = new GlobalConfigurations();
+            objConfig.InitilizeConnectionString();
+            connectionString = objConfig.connectionString;
+            commandTimeout = Convert.ToInt32(objConfig.commandTimeout);
+        }
+        catch (Exception exp)
+        {
+            logExcpUIobj.MethodName = "FiscalPeriodSetupFormDAL()";
+            logExcpUIobj.ResourceName = "FiscalPeriodSetupFormDAL.CS";
+            logExcpUIobj.RecordId = "";
+            logExcpUIobj.ExceptionDetails = "Error Occured. System Generated Error is: " + exp.ToString();
+            logExcpDALobj.SaveExceptionToDB(logExcpUIobj);
+
+            throw new Exception("[FiscalPeriodSetupFormDAL : FiscalPeriodSetupFormDAL] ERROR: An error occured while connection to staging database. Please check the connection settings : [" + exp.ToString() + "]");
+        }
+    }
+
+    public DataTable GetFiscalPeriodSetupListById(FiscalPeriodSetupFormUI fiscalPeriodSetupFormUI)
+    {
+
+        DataSet ds = new DataSet();
+        DataTable dtbl = new DataTable();
+        try
+        {
+            using (SqlConnection SupportCon = new SqlConnection(connectionString))
+            {
+                SqlCommand sqlCmd = new SqlCommand("SP_FiscalPeriodSetup_SelectById", SupportCon);
+                sqlCmd.CommandType = CommandType.StoredProcedure;
+                sqlCmd.CommandTimeout = commandTimeout;
+
+                sqlCmd.Parameters.Add("@tbl_FiscalPeriodSetupId", SqlDbType.NVarChar);
+                sqlCmd.Parameters["@tbl_FiscalPeriodSetupId"].Value = fiscalPeriodSetupFormUI.Tbl_FiscalPeriodSetupId;
+
+                using (SqlDataAdapter adapter = new SqlDataAdapter(sqlCmd))
+                {
+                    adapter.Fill(ds);
+                }
+            }
+            if (ds.Tables.Count > 0)
+                dtbl = ds.Tables[0];
+        }
+        catch (Exception exp)
+        {
+            logExcpUIobj.MethodName = "getFiscalPeriodSetupListById()";
+            logExcpUIobj.ResourceName = "FiscalPeriodSetupFormDAL.CS";
+            logExcpUIobj.RecordId = fiscalPeriodSetupFormUI.Tbl_FiscalPeriodSetupId;
+            logExcpUIobj.ExceptionDetails = "Error Occured. System Generated Error is: " + exp.ToString();
+            logExcpDALobj.SaveExceptionToDB(logExcpUIobj);
+
+            log.Error("[FiscalPeriodSetupFormDAL : getFiscalPeriodSetupListById] An error occured in the processing of Record Id : " + fiscalPeriodSetupFormUI.Tbl_FiscalPeriodSetupId + ". Details : [" + exp.ToString() + "]");
+        }
+        finally
+        {
+            ds.Dispose();
+        }
+
+        return dtbl;
+
+    }
+
+    public int AddFiscalPeriodSetup(FiscalPeriodSetupFormUI fiscalPeriodSetupFormUI)
+    {
+
+        int result = 0;
+        try
+        {
+            using (SqlConnection SupportCon = new SqlConnection(connectionString))
+            {
+                SupportCon.Open();
+                SqlCommand sqlCmd = new SqlCommand("SP_FiscalPeriodSetup_Insert", SupportCon);
+                sqlCmd.CommandType = CommandType.StoredProcedure;
+                sqlCmd.CommandTimeout = commandTimeout;
+
+                sqlCmd.Parameters.Add("@CreatedBy", SqlDbType.NVarChar);
+                sqlCmd.Parameters["@CreatedBy"].Value = fiscalPeriodSetupFormUI.CreatedBy;
+
+                sqlCmd.Parameters.Add("@tbl_OrganizationId", SqlDbType.NVarChar);
+                sqlCmd.Parameters["@tbl_OrganizationId"].Value = fiscalPeriodSetupFormUI.Tbl_OrganizationId;
+
+                sqlCmd.Parameters.Add("@Opt_Year", SqlDbType.TinyInt);
+                sqlCmd.Parameters["@Opt_Year"].Value = fiscalPeriodSetupFormUI.Opt_Year;
+
+                sqlCmd.Parameters.Add("@FirstDayDate", SqlDbType.DateTime);
+                sqlCmd.Parameters["@FirstDayDate"].Value = fiscalPeriodSetupFormUI.FirstDayDate;
+
+                //sqlCmd.Parameters.Add("@FirstDayDate_Hijri", SqlDbType.BigInt);
+                //sqlCmd.Parameters["@FirstDayDate_Hijri"].Value = fiscalPeriodSetupFormUI.FirstDayDate_Hijri;
+
+                sqlCmd.Parameters.Add("@LastDayDate", SqlDbType.DateTime);
+                sqlCmd.Parameters["@LastDayDate"].Value = fiscalPeriodSetupFormUI.LastDayDate;
+
+                //sqlCmd.Parameters.Add("@LastDayDate_Hijri", SqlDbType.BigInt);
+                //sqlCmd.Parameters["@LastDayDate_Hijri"].Value = fiscalPeriodSetupFormUI.LastDayDate_Hijri;
+
+                sqlCmd.Parameters.Add("@HistoricalYear", SqlDbType.Bit);
+                sqlCmd.Parameters["@HistoricalYear"].Value = fiscalPeriodSetupFormUI.HistoricalYear;
+
+                sqlCmd.Parameters.Add("@NumberOfPeriod", SqlDbType.TinyInt);
+                sqlCmd.Parameters["@NumberOfPeriod"].Value = fiscalPeriodSetupFormUI.NumberOfPeriod;
+
+                result = sqlCmd.ExecuteNonQuery();
+
+                sqlCmd.Dispose();
+                SupportCon.Close();
+            }
+        }
+        catch (Exception exp)
+        {
+            logExcpUIobj.MethodName = "AddFiscalPeriodSetup()";
+            logExcpUIobj.ResourceName = "FiscalPeriodSetupFormDAL.CS";
+            logExcpUIobj.RecordId = "";
+            logExcpUIobj.ExceptionDetails = "Error Occured. System Generated Error is: " + exp.ToString();
+            logExcpDALobj.SaveExceptionToDB(logExcpUIobj);
+
+            log.Error("[FiscalPeriodSetupFormDAL : AddFiscalPeriodSetup] An error occured in the processing of Record. Details : [" + exp.ToString() + "]");
+        }
+
+        return result;
+    }
+
+    public int UpdateFiscalPeriodSetup(FiscalPeriodSetupFormUI fiscalPeriodSetupFormUI)
+    {
+
+        int result = 0;
+        try
+        {
+            using (SqlConnection SupportCon = new SqlConnection(connectionString))
+            {
+                SupportCon.Open();
+                SqlCommand sqlCmd = new SqlCommand("SP_FiscalPeriodSetup_Update", SupportCon);
+                sqlCmd.CommandType = CommandType.StoredProcedure;
+                sqlCmd.CommandTimeout = commandTimeout;
+
+                sqlCmd.Parameters.Add("@tbl_FiscalPeriodSetupId", SqlDbType.NVarChar);
+                sqlCmd.Parameters["@tbl_FiscalPeriodSetupId"].Value = fiscalPeriodSetupFormUI.Tbl_FiscalPeriodSetupId;
+
+                sqlCmd.Parameters.Add("@ModifiedBy", SqlDbType.NVarChar);
+                sqlCmd.Parameters["@ModifiedBy"].Value = fiscalPeriodSetupFormUI.ModifiedBy;
+
+                sqlCmd.Parameters.Add("@tbl_OrganizationId", SqlDbType.NVarChar);
+                sqlCmd.Parameters["@tbl_OrganizationId"].Value = fiscalPeriodSetupFormUI.Tbl_OrganizationId;
+
+                sqlCmd.Parameters.Add("@Opt_Year", SqlDbType.TinyInt);
+                sqlCmd.Parameters["@Opt_Year"].Value = fiscalPeriodSetupFormUI.Opt_Year;
+
+                sqlCmd.Parameters.Add("@FirstDayDate", SqlDbType.DateTime);
+                sqlCmd.Parameters["@FirstDayDate"].Value = fiscalPeriodSetupFormUI.FirstDayDate;
+
+                sqlCmd.Parameters.Add("@LastDayDate", SqlDbType.DateTime);
+                sqlCmd.Parameters["@LastDayDate"].Value = fiscalPeriodSetupFormUI.LastDayDate;
+
+                sqlCmd.Parameters.Add("@HistoricalYear", SqlDbType.Bit);
+                sqlCmd.Parameters["@HistoricalYear"].Value = fiscalPeriodSetupFormUI.HistoricalYear;
+
+                sqlCmd.Parameters.Add("@NumberOfPeriod", SqlDbType.TinyInt);
+                sqlCmd.Parameters["@NumberOfPeriod"].Value = fiscalPeriodSetupFormUI.NumberOfPeriod;
+
+
+
+                result = sqlCmd.ExecuteNonQuery();
+
+                sqlCmd.Dispose();
+                SupportCon.Close();
+            }
+        }
+        catch (Exception exp)
+        {
+            logExcpUIobj.MethodName = "UpdateFiscalPeriodSetup()";
+            logExcpUIobj.ResourceName = "FiscalPeriodSetupFormDAL.CS";
+            logExcpUIobj.RecordId = fiscalPeriodSetupFormUI.Tbl_FiscalPeriodSetupId;
+            logExcpUIobj.ExceptionDetails = "Error Occured. System Generated Error is: " + exp.ToString();
+            logExcpDALobj.SaveExceptionToDB(logExcpUIobj);
+
+            log.Error("[FiscalPeriodSetupFormDAL : UpdateFiscalPeriodSetup] An error occured in the processing of Record Id : " + fiscalPeriodSetupFormUI.Tbl_FiscalPeriodSetupId + ". Details : [" + exp.ToString() + "]");
+        }
+
+        return result;
+    }
+
+    public int DeleteFiscalPeriodSetup(FiscalPeriodSetupFormUI fiscalPeriodSetupFormUI)
+    {
+
+        int result = 0;
+        try
+        {
+            using (SqlConnection SupportCon = new SqlConnection(connectionString))
+            {
+                SupportCon.Open();
+                SqlCommand sqlCmd = new SqlCommand("SP_FiscalPeriodSetup_Delete", SupportCon);
+
+                sqlCmd.CommandType = CommandType.StoredProcedure;
+                sqlCmd.CommandTimeout = commandTimeout;
+
+                sqlCmd.Parameters.Add("@tbl_FiscalPeriodSetupId", SqlDbType.NVarChar);
+                sqlCmd.Parameters["@tbl_FiscalPeriodSetupId"].Value = fiscalPeriodSetupFormUI.Tbl_FiscalPeriodSetupId;
+
+                result = sqlCmd.ExecuteNonQuery();
+
+                sqlCmd.Dispose();
+                SupportCon.Close();
+            }
+        }
+        catch (Exception exp)
+        {
+            logExcpUIobj.MethodName = "DeleteFiscalPeriodSetup()";
+            logExcpUIobj.ResourceName = "FiscalPeriodSetupFormDAL.CS";
+            logExcpUIobj.RecordId = fiscalPeriodSetupFormUI.Tbl_FiscalPeriodSetupId;
+            logExcpUIobj.ExceptionDetails = "Error Occured. System Generated Error is: " + exp.ToString();
+            logExcpDALobj.SaveExceptionToDB(logExcpUIobj);
+
+            log.Error("[FiscalPeriodSetupFormDAL : DeleteFiscalPeriodSetup] An error occured in the processing of Record Id : " + fiscalPeriodSetupFormUI.Tbl_FiscalPeriodSetupId + ". Details : [" + exp.ToString() + "]");
+        }
+
+        return result;
+    }
+}

@@ -1,0 +1,26 @@
+﻿<%@ Page Language="C#" AutoEventWireup="true" CodeFile="ServiceConsume.aspx.cs" Inherits="ServiceConsume" %>
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+    <title></title>
+</head>
+<body>
+    <form id="form1" runat="server">
+    <div>
+         <asp:Label ID="lblFisrtNumber"  Text="First Number" runat="server" ></asp:Label> 
+         &nbsp;
+    <asp:TextBox ID="txtNum1" runat="server" ></asp:TextBox> 
+        <br />
+        <asp:Label ID="lblSecondNumber"  Text="SecondNumber" runat="server" ></asp:Label> 
+         &nbsp;
+    <asp:TextBox ID="txtNum2" runat="server" ></asp:TextBox> 
+        <br />
+        <asp:Button id="btnSubmit" runat="server" Text="Submit" OnClick="btnSubmit_Click" />
+        <br />
+    <asp:Label ID="lblResult" runat="server"></asp:Label>
+    </div>
+    </form>
+</body>
+</html>

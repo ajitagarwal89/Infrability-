@@ -1,0 +1,241 @@
+﻿using System;
+using System.Data.SqlClient;
+using System.Data;
+using log4net;
+
+
+/// <summary>
+/// Summary description for FiscalPeriodSetupListDAL
+/// </summary>
+public class FiscalPeriodSetupListDAL
+{
+    string connectionString = string.Empty;
+    int commandTimeout = 0;
+    LogExceptionUI logExcpUIobj = new LogExceptionUI();
+    LogException logExcpDALobj = new LogException();
+    protected static readonly ILog log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
+    public FiscalPeriodSetupListDAL()
+    {
+        try
+        {
+            GlobalConfigurations objConfig = new GlobalConfigurations();
+            objConfig.InitilizeConnectionString();
+            connectionString = objConfig.connectionString;
+            commandTimeout = Convert.ToInt32(objConfig.commandTimeout);
+        }
+        catch (Exception exp)
+        {
+            logExcpUIobj.MethodName = "FiscalPeriodSetupListDAL()";
+            logExcpUIobj.ResourceName = "FiscalPeriodSetupListDAL.CS";
+            logExcpUIobj.RecordId = "";
+            logExcpUIobj.ExceptionDetails = "Error Occured. System Generated Error is: " + exp.ToString();
+            logExcpDALobj.SaveExceptionToDB(logExcpUIobj);
+
+            throw new Exception("[FiscalPeriodSetupListDAL : FiscalPeriodSetupListDAL] ERROR: An error occured while connection to staging database. Please check the connection settings : [" + exp.ToString() + "]");
+        }
+    }
+
+    public DataTable GetFiscalPeriodSetupList()
+    {
+
+        DataSet ds = new DataSet();
+        DataTable dtbl = new DataTable();
+        //Boolean result = false;
+        try
+        {
+            using (SqlConnection SupportCon = new SqlConnection(connectionString))
+            {
+                SqlCommand sqlCmd = new SqlCommand("SP_FiscalPeriodSetup_Select", SupportCon);
+                sqlCmd.CommandType = CommandType.StoredProcedure;
+                sqlCmd.CommandTimeout = commandTimeout;
+
+                using (SqlDataAdapter adapter = new SqlDataAdapter(sqlCmd))
+                {
+                    adapter.Fill(ds);
+                }
+            }
+            if (ds.Tables.Count > 0)
+                dtbl = ds.Tables[0];
+        }
+        catch (Exception exp)
+        {
+            logExcpUIobj.MethodName = "getFiscalPeriodSetupList()";
+            logExcpUIobj.ResourceName = "FiscalPeriodSetupListDAL.CS";
+            logExcpUIobj.RecordId = "";
+            logExcpUIobj.ExceptionDetails = "Error Occured. System Generated Error is: " + exp.ToString();
+            logExcpDALobj.SaveExceptionToDB(logExcpUIobj);
+
+            log.Error("[FiscalPeriodSetupListDAL : getFiscalPeriodSetupList] An error occured in the processing of Record. Details : [" + exp.ToString() + "]");
+        }
+        finally
+        {
+            ds.Dispose();
+        }
+
+        return dtbl;
+
+    }
+
+    public DataTable GetFiscalPeriodSetupListById(FiscalPeriodSetupListUI fiscalPeriodSetupListUI)
+    {
+
+        DataSet ds = new DataSet();
+        DataTable dtbl = new DataTable();
+        //Boolean result = false;
+        try
+        {
+            using (SqlConnection SupportCon = new SqlConnection(connectionString))
+            {
+                SqlCommand sqlCmd = new SqlCommand("SP_FiscalPeriodSetup_SelectById", SupportCon);
+                sqlCmd.CommandType = CommandType.StoredProcedure;
+                sqlCmd.CommandTimeout = commandTimeout;
+
+                sqlCmd.Parameters.Add("@tbl_FiscalPeriodSetupId", SqlDbType.NVarChar);
+                sqlCmd.Parameters["@tbl_FiscalPeriodSetupId"].Value = fiscalPeriodSetupListUI.Tbl_FiscalPeriodSetupId;
+
+                using (SqlDataAdapter adapter = new SqlDataAdapter(sqlCmd))
+                {
+                    adapter.Fill(ds);
+                }
+            }
+            if (ds.Tables.Count > 0)
+                dtbl = ds.Tables[0];
+        }
+        catch (Exception exp)
+        {
+            logExcpUIobj.MethodName = "getFiscalPeriodSetupListById()";
+            logExcpUIobj.ResourceName = "FiscalPeriodSetupListDAL.CS";
+            logExcpUIobj.RecordId = fiscalPeriodSetupListUI.Tbl_FiscalPeriodSetupId;
+            logExcpUIobj.ExceptionDetails = "Error Occured. System Generated Error is: " + exp.ToString();
+            logExcpDALobj.SaveExceptionToDB(logExcpUIobj);
+
+            log.Error("[FiscalPeriodSetupListDAL : getFiscalPeriodSetupListById] An error occured in the processing of Record Id : " + fiscalPeriodSetupListUI.Tbl_FiscalPeriodSetupId + ". Details : [" + exp.ToString() + "]");
+        }
+        finally
+        {
+            ds.Dispose();
+        }
+
+        return dtbl;
+
+    }
+
+    public DataTable GetFiscalPeriodSetupListBySearchParameters(FiscalPeriodSetupListUI fiscalPeriodSetupListUI)
+    {
+
+        DataSet ds = new DataSet();
+        DataTable dtbl = new DataTable();
+        //Boolean result = false;
+        try
+        {
+            using (SqlConnection SupportCon = new SqlConnection(connectionString))
+            {
+                SqlCommand sqlCmd = new SqlCommand("SP_FiscalPeriodSetup_SelectBySearchParameters", SupportCon);
+                sqlCmd.CommandType = CommandType.StoredProcedure;
+                sqlCmd.CommandTimeout = commandTimeout;
+
+                sqlCmd.Parameters.Add("@Search", SqlDbType.NVarChar);
+                sqlCmd.Parameters["@Search"].Value = fiscalPeriodSetupListUI.Search;
+
+                using (SqlDataAdapter adapter = new SqlDataAdapter(sqlCmd))
+                {
+                    adapter.Fill(ds);
+                }
+            }
+            if (ds.Tables.Count > 0)
+                dtbl = ds.Tables[0];
+        }
+        catch (Exception exp)
+        {
+            logExcpUIobj.MethodName = "GetFiscalPeriodSetupListBySearchParameters()";
+            logExcpUIobj.ResourceName = "FiscalPeriodSetupListDAL.CS";
+            logExcpUIobj.RecordId = "Search = " + fiscalPeriodSetupListUI.Search;
+            logExcpUIobj.ExceptionDetails = "Error Occured. System Generated Error is: " + exp.ToString();
+            logExcpDALobj.SaveExceptionToDB(logExcpUIobj);
+
+            log.Error("[FiscalPeriodSetupListDAL : GetFiscalPeriodSetupListBySearchParameters] An error occured in the processing of Record Search = " + fiscalPeriodSetupListUI.Search + " . Details : [" + exp.ToString() + "]");
+        }
+        finally
+        {
+            ds.Dispose();
+        }
+
+        return dtbl;
+
+    }
+
+    public int DeleteFiscalPeriodSetup(FiscalPeriodSetupListUI fiscalPeriodSetupListUI)
+    {
+
+        int result = 0;
+        try
+        {
+            using (SqlConnection SupportCon = new SqlConnection(connectionString))
+            {
+                SupportCon.Open();
+                SqlCommand sqlCmd = new SqlCommand("SP_FiscalPeriodSetup_Delete", SupportCon);
+
+                sqlCmd.CommandType = CommandType.StoredProcedure;
+                sqlCmd.CommandTimeout = commandTimeout;
+
+                sqlCmd.Parameters.Add("@tbl_FiscalPeriodSetupId", SqlDbType.NVarChar);
+                sqlCmd.Parameters["@tbl_FiscalPeriodSetupId"].Value = fiscalPeriodSetupListUI.Tbl_FiscalPeriodSetupId;
+
+                result = sqlCmd.ExecuteNonQuery();
+
+                sqlCmd.Dispose();
+                SupportCon.Close();
+            }
+        }
+        catch (Exception exp)
+        {
+            logExcpUIobj.MethodName = "DeleteFiscalPeriodSetup()";
+            logExcpUIobj.ResourceName = "FiscalPeriodSetupListDAL.CS";
+            logExcpUIobj.RecordId = fiscalPeriodSetupListUI.Tbl_FiscalPeriodSetupId;
+            logExcpUIobj.ExceptionDetails = "Error Occured. System Generated Error is: " + exp.ToString();
+            logExcpDALobj.SaveExceptionToDB(logExcpUIobj);
+
+            log.Error("[FiscalPeriodSetupListDAL : DeleteFiscalPeriodSetup] An error occured in the processing of Record Id : " + fiscalPeriodSetupListUI.Tbl_FiscalPeriodSetupId + ". Details : [" + exp.ToString() + "]");
+        }
+
+        return result;
+    }
+
+    public DataTable GetFiscalPeriodSetupListForExportToExcel()
+    {
+        DataSet ds = new DataSet();
+        DataTable dtbl = new DataTable();
+        //Boolean result = false;
+        try
+        {
+            using (SqlConnection SupportCon = new SqlConnection(connectionString))
+            {
+                SqlCommand sqlCmd = new SqlCommand("SP_FiscalPeriodSetup_SelectExportToExcel", SupportCon);
+                sqlCmd.CommandType = CommandType.StoredProcedure;
+                sqlCmd.CommandTimeout = commandTimeout;
+                using (SqlDataAdapter adapter = new SqlDataAdapter(sqlCmd))
+                {
+                    adapter.Fill(ds);
+                }
+            }
+            if (ds.Tables.Count > 0)
+                dtbl = ds.Tables[0];
+        }
+        catch (Exception exp)
+        {
+            logExcpUIobj.MethodName = "GetFiscalPeriodSetupListForExportToExcel()";
+            logExcpUIobj.ResourceName = "FiscalPeriodSetupListDAL.CS";
+            logExcpUIobj.RecordId = "";
+            logExcpUIobj.ExceptionDetails = "Error Occured. System Generated Error is: " + exp.ToString();
+            logExcpDALobj.SaveExceptionToDB(logExcpUIobj);
+            log.Error("[FiscalPeriodSetupListDAL : GetFiscalPeriodSetupListForExportToExcel] An error occured in the processing of Record. Details : [" + exp.ToString() + "]");
+        }
+        finally
+        {
+            ds.Dispose();
+        }
+        return dtbl;
+    }
+
+}

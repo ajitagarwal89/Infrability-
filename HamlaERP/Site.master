@@ -1,0 +1,667 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeFile="Site.master.cs" Inherits="Site" %>
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+    <title>::: FINWARE :::</title>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <!-- <link rel="shortcut icon" type="image/png" href="/imgs/favicon.png" /> -->
+    <!-- inject:css -->
+    <link runat="server" id="bootstrapCss" rel="stylesheet" />
+    <link rel="stylesheet" href="infra_components/font-awesome/css/font-awesome.min.css" />
+    <!-- endinject -->
+
+    <!-- Main Style  -->
+    <link runat="server" id="mainCss" rel="stylesheet" />
+
+    <script src="infra_assets/js/modernizr-custom.js"></script>
+    <link href="infra_components/bootstrap/dist/nprogress.css" rel="stylesheet" />
+    <link href="infra_components/bootstrap/dist/css/animations.css" rel="stylesheet" />
+    <script src="infra_components/bootstrap/dist/nprogress.js"></script>
+    <asp:ContentPlaceHolder ID="HeadContent" runat="server">
+    </asp:ContentPlaceHolder>
+</head>
+<body onload="getnav();getstartnav();">
+    <form id="FormMaster" runat="server">
+        <asp:ScriptManager runat="server" ID="sm"></asp:ScriptManager>
+        <div id="ui" class="ui">
+            <!--header start-->
+            <header id="header" class="ui-header">
+
+                <div class="navbar-header" style="text-align: center">
+
+                    <!--logo start-->
+                    <a href="index.html" class="navbar-brand">
+                        <h3 style="margin-top: 1px; color: #808080; font-weight: 600;">HAMLA</h3>
+                    </a>
+                    <!--logo end-->
+                    <!--<span class="logo"><img src="imgs/logo-dark.png" alt=""/></span>
+                        <span class="logo-compact"><!--<img src="imgs/logo-icon-dark.png" alt=""/>Accounting System</span>-->
+                </div>
+
+                <div class="bcr-header">
+                    <ol class="breadcrumb">
+                        <li><a href="#">Finance</a></li>
+                        <li><a href="#">Accounts Receivable</a></li>
+                        <li class="active">Customer Invoice Processing (Services)</li>
+                    </ol>
+                </div>
+
+                <%--<div class="search-dropdown dropdown visible-xs">
+                    <button type="button" class="btn dropdown-toggle" data-toggle="dropdown" aria-expanded="true"><i class="fa fa-search"></i></button>
+                    <div class="dropdown-menu">
+                         <asp:TextBox runat="server" ID="txtsearch" class="form-control" placeholder="Search here..."> </asp:TextBox>
+                    </div>
+                </div>--%>
+
+                <div class="navbar-collapse nav-responsive-disabled">
+
+                    <!--toggle buttons start-->
+                    <ul class="nav navbar-nav">
+                        <li>
+                            <a class="toggle-btn" data-toggle="ui-nav" href="#">
+                                <i class="fa fa-bars"></i>
+                            </a>
+                        </li>
+                    </ul>
+                    <!-- toggle buttons end -->
+
+                    <ul class="nav navbar-nav navbar-right">
+                        <li class="dropdown dropdown-usermenu">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
+                                <div class="user-avatar">
+                                    <img src="../../../images/a0.jpg" alt="..." />
+                                </div>
+                                <span class="hidden-sm hidden-xs">
+                                    <asp:Label ID="lblUserName" runat="server"></asp:Label></span>
+                                <span class="caret hidden-sm hidden-xs"></span>
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-usermenu pull-left">
+                                <li><a href="#"><i class="fa fa-cogs faa-parent animated-hover"></i>
+                                    <asp:Literal runat="server" ID="ltrUserPreferences" Text="<%$ Resources:GlobalResource, ltrUserPreferences%>"></asp:Literal>
+                                </a>
+                                </li>
+                                <li class="divider"></li>
+                                <li class="divider"></li>
+                                <li>
+                                    <asp:LinkButton runat="server" ID="lnkLogout" OnClick="lnkLogout_Click">
+                                        <i class="fa fa-sign-out"></i>
+                                        <asp:Literal runat="server" ID="ltrLogout" Text="<%$ Resources:GlobalResource, ltrLogout%>"></asp:Literal>
+                                    </asp:LinkButton>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </header>
+            <!--header end-->
+
+            <!--sidebar start-->
+            <aside id="aside" class="ui-aside">
+                <ul class="nav" ui-nav>
+                    <li style="background-color: #2c8fe9; color: #fff;">
+                        <a href="Default.aspx"><i class="fa fa-home"></i>
+                            <span>
+                                <asp:Literal runat="server" ID="ltrDashBoardWeb" Text="<%$ Resources:GlobalResource, mnuDashBoard%>"></asp:Literal>
+                            </span>
+                        </a>
+                        <ul class="nav nav-sub" style="background-color: #3e4a70; color: #fff;">
+                            <li class="nav-sub-header">
+                                <a href="Default.aspx">
+                                    <span>
+                                        <asp:Literal runat="server" ID="ltrDashBoardMobile" Text="<%$ Resources:GlobalResource, mnuDashBoard%>"></asp:Literal></span>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+
+                    <li>
+                        <a id="finance" href="#" onclick="show_sub_F('finance_sub','finance');">
+                            <i class="fa fa-bar-chart-o"></i>
+                            <span>
+                                <asp:Literal runat="server" ID="ltrFinance" Text="<%$ Resources:GlobalResource, mnuFinance%>"></asp:Literal></span>
+                            <i class="fa fa-angle-down pull-right"></i>
+                        </a>
+                        <ul class="nav nav-sub finance" id="finance_sub">
+                            <li>
+                                <a id="accp" href="#" onclick="show_sub('accp_sub','accp');">
+                                    <span>
+                                        <asp:Literal runat="server" ID="ltrAccountPayables" Text="<%$ Resources:GlobalResource, mnuAccountPayables%>"></asp:Literal>
+                                    </span>
+                                    <i class="fa fa-angle-down pull-right"></i>
+                                </a>
+                                <ul class="nav nav-sub" id="accp_sub">
+                                    <li>
+
+                                        <a id="wucEmployeeGeneralExpenses" href="../../../Start.aspx?stype=EmployeeGeneralExpenses"><span>
+                                            <asp:Literal runat="server" ID="ltrEmployeeGeneralExpenses" Text="<%$ Resources:GlobalResource, mnuEmployeeGeneralExpenses%>"></asp:Literal>
+                                        </span></a>
+
+
+                                        <a id="wucEmployeeSuppplierMasterCreation" href="../../../Start.aspx?stype=EmployeeSupplierMasterCreation">
+                                            <span>
+                                                <asp:Literal runat="server" ID="ltrEmployeeSuppplierMasterCreation" Text="<%$ Resources:GlobalResource, mnuEmployeeSupplierMasterCreation%>"></asp:Literal>
+                                            </span>
+                                        </a>
+
+                                        <a id="wucNonPOBasedInvoice" href="../../../Start.aspx?stype=NonPOBasedInvoice"><span>
+                                            <asp:Literal runat="server" ID="ltrNonPOBasedInvoice" Text="<%$ Resources:GlobalResource, mnuNonPOBasedInvoice%>"></asp:Literal>
+                                        </span>
+                                        </a>
+
+
+                                        <a id="wucPOBasedInvoice" href="../../../Start.aspx?stype=POBasedInvoice"><span>
+                                            <asp:Literal runat="server" ID="ltrPOBasedInvoice" Text="<%$ Resources:GlobalResource, mnuPOBasedInvoice%>"></asp:Literal>
+                                        </span>
+                                        </a>
+
+                                        <a id="smc" href="../../../Start.aspx?stype=SupplierMasterCreation"><span>
+                                            <asp:Literal runat="server" ID="ltrSupplierMasterCreation" Text="<%$ Resources:GlobalResource, mnuSupplierMasterCreation%>"></asp:Literal>
+
+                                        </span></a>
+
+                                    </li>
+                                </ul>
+                                <a id="accr" href="#" onclick="show_sub('accr_sub','accr');">
+                                    <span>
+                                        <asp:Literal runat="server" ID="ltrAccountReceivable" Text="<%$ Resources:GlobalResource, mnuAccountReceivable%>"></asp:Literal>
+                                    </span>
+                                    <i class="fa fa-angle-down pull-right"></i>
+                                </a>
+                                <ul class="nav nav-sub" id="accr_sub">
+                                    <li>
+                                        <a id="wucCustomerMasterCreation" href="../../../Start.aspx?stype=CustomerMasterCreation">
+                                            <span>
+                                                <asp:Literal runat="server" ID="lrCustomerMasterCreation" Text="<%$ Resources:GlobalResource, mnuCustomerMasterCreation%>"></asp:Literal>
+                                            </span>
+                                        </a>
+                                        <a id="wucCustomerInvoiceProcess" href="../../../Start.aspx?stype=CustomerInvoiceProcess">
+                                            <span>
+                                                <asp:Literal runat="server" ID="ltrCustomerInvoiceProcess" Text="<%$ Resources:GlobalResource, mnuCustomerInvoiceProcess%>"></asp:Literal>
+                                            </span>
+                                        </a>
+                                        <a id="wucCustomerInvoice" href="../../../Start.aspx?stype=CustomerInvoice">
+                                            <span>
+                                                <asp:Literal runat="server" ID="ltrCustomerInvoice" Text="<%$ Resources:GlobalResource, mnuCustomerInvoice%>"></asp:Literal>
+                                            </span>
+                                        </a>
+                                    </li>
+                                </ul>
+                                <a id="ba" href="#" onclick="show_sub('ba_sub','ba');">
+                                    <span>
+                                        <asp:Literal runat="server" ID="ltrBankAccounting" Text="<%$ Resources:GlobalResource, mnuBankAccounting%>"></asp:Literal>
+                                    </span>
+                                    <i class="fa fa-angle-down pull-right"></i>
+                                </a>
+                                <ul class="nav nav-sub" id="ba_sub">
+                                    <li>
+                                        <a id="wuDownPaymentFromCustomer" href="../../../Start.aspx?stype=DownPaymentFromCustomer">
+                                            <span>
+                                                <asp:Literal runat="server" ID="ltrDownPaymentFromCustomer" Text="<%$ Resources:GlobalResource, mnuDownPaymentFromCustomer%>"></asp:Literal>
+                                            </span></a>
+                                        <a id="wuPaymentFromCustomer" href="../../../Start.aspx?stype=PaymentFromCustomer">
+                                            <span>
+                                                <asp:Literal runat="server" ID="ltrPaymentFromCustomer" Text="<%$ Resources:GlobalResource, mnuPaymentFromCustomer%>"></asp:Literal>
+                                            </span></a>
+                                        <a id="wuDownPaymentToSupplier" href="../../../Start.aspx?stype=DownPaymentToSupplier">
+                                            <span>
+                                                <asp:Literal runat="server" ID="ltrDownPaymentSupplier" Text="<%$ Resources:GlobalResource, mnuDownPaymentToSupplier%>"></asp:Literal>
+                                            </span>
+                                        </a>
+                                        <a id="wuPaymentToSupplier" href="../../../Start.aspx?stype=PaymentToSupplier">
+                                            <span>
+                                                <asp:Literal runat="server" ID="ltrPaymentToSupplier" Text="<%$ Resources:GlobalResource, mnuPaymentToSupplier%>">
+                                                </asp:Literal>
+                                            </span>
+                                        </a>
+                                        <a id="wuPaymentToEmployee" href="../../../Start.aspx?stype=PaymentToEmployee">
+                                            <span>
+                                                <asp:Literal runat="server" ID="ltrPaymentToEmployee" Text="<%$ Resources:GlobalResource, mnuPaymentToEmployee%>"></asp:Literal>
+                                            </span>
+                                        </a>
+                                        <a href="#"><span>
+                                            <asp:Literal runat="server" ID="ltrPayrollFinanceIntegration" Text="<%$ Resources:GlobalResource, mnuPayrollFinanceIntegration%>"></asp:Literal>
+                                        </span></a>
+
+                                        <a href="#"><span>
+                                            <asp:Literal runat="server" ID="ltrBankMasters" Text="<%$ Resources:GlobalResource, mnuBankMasters%>"></asp:Literal>
+                                        </span></a>
+                                        <a id="wuPettyCash" href="../../../Start.aspx?stype=PettyCash"><span>
+                                            <asp:Literal runat="server" ID="ltrPettyCash" Text="<%$ Resources:GlobalResource, mnuPettyCash%>"></asp:Literal>
+                                        </span></a>
+                                        <a href="#"><span>
+                                            <asp:Literal runat="server" ID="ltrBankReconciliationStatement" Text="<%$ Resources:GlobalResource, mnuBankReconciliationStatement%>"></asp:Literal>
+                                        </span></a>
+                                    </li>
+                                </ul>
+                                <a id="aa" href="#" onclick="show_sub('aa_sub','aa');">
+                                    <span>
+                                        <asp:Literal runat="server" ID="ltrAssetAccounting" Text="<%$ Resources:GlobalResource, mnuAssetAccounting%>"></asp:Literal>
+                                    </span>
+                                    <i class="fa fa-angle-down pull-right"></i>
+                                </a>
+                                <ul class="nav nav-sub" id="aa_sub">
+                                    <li>
+                                        <a href="#"><span>
+                                            <asp:Literal runat="server" ID="ltrFixedAssetPurchase" Text="<%$ Resources:GlobalResource, mnuFixedAssetPurchase%>"></asp:Literal>
+                                        </span></a>
+                                        <a href="#"><span>
+                                            <asp:Literal runat="server" ID="ltrCapitalizationOfAssets" Text="<%$ Resources:GlobalResource, mnuCapitalizationOfAssets%>"></asp:Literal>
+                                        </span></a>
+                                        <a href="#"><span>
+                                            <asp:Literal runat="server" ID="ltrDisposalOfAssets" Text="<%$ Resources:GlobalResource, mnuDisposalOfAssets%>"></asp:Literal>
+                                        </span></a>
+                                        <a href="#"><span>
+                                            <asp:Literal runat="server" ID="ltrTransferOfAssets" Text="<%$ Resources:GlobalResource, mnuTransferOfAssets%>"></asp:Literal>
+                                        </span></a>
+                                        <a href="#"><span>
+                                            <asp:Literal runat="server" ID="ltrDepreciationOfAssets" Text="<%$ Resources:GlobalResource, mnuDepreciationOfAssets%>"></asp:Literal>
+                                        </span></a>
+                                    </li>
+                                </ul>
+                                <a id="gl" href="#" onclick="show_sub('gl_sub','gl');">
+                                    <span>
+                                        <asp:Literal runat="server" ID="ltrGeneralLedger" Text="<%$ Resources:GlobalResource, mnuGeneralLedger%>"></asp:Literal>
+                                    </span>
+                                    <i class="fa fa-angle-down pull-right"></i>
+                                </a>
+                                <ul class="nav nav-sub" id="gl_sub">
+                                    <li>
+                                        <a href="#"><span>
+                                            <asp:Literal runat="server" ID="ltrGLMaster" Text="<%$ Resources:GlobalResource, mnuGLMaster%>"></asp:Literal>
+                                        </span></a>
+                                        <a id="wucGL_Integration" href="../../../Start.aspx?stype=GL_Integration">
+                                            <span>
+                                                <asp:Literal runat="server" ID="ltrGLIntegration" Text="<%$ Resources:GlobalResource, mnuGLIntegration%>"></asp:Literal>
+                                            </span>
+                                        </a>
+                                        <a href="#"><span>
+                                            <asp:Literal runat="server" ID="ltrGLRecurringEntry" Text="<%$ Resources:GlobalResource, mnuGLRecurringEntry%>"></asp:Literal>
+                                        </span></a>
+                                        <a href="#"><span>
+                                            <asp:Literal runat="server" ID="ltrGLAccrualEntry" Text="<%$ Resources:GlobalResource, mnuGLAccrualEntry%>"></asp:Literal>
+                                        </span></a>
+                                        <a href="#"><span>
+                                            <asp:Literal runat="server" ID="ltrGLMonthAndYearEndClosing" Text="<%$ Resources:GlobalResource, mnuGLMonthAndYearEndClosing%>"></asp:Literal>
+                                        </span></a>
+                                    </li>
+                                </ul>
+                                <%--<a href="#">
+                                    <span>
+                                        <asp:Literal runat="server" ID="ltrBudget" Text="<%$ Resources:GlobalResource, mnuBudget%>"></asp:Literal>
+                                    </span>
+                                </a>
+                                <a href="#">
+                                    <span>
+                                        <asp:Literal runat="server" ID="ltrProjectAccounting" Text="<%$ Resources:GlobalResource, mnuProjectAccounting%>"></asp:Literal>
+                                    </span>
+                                </a>--%>
+                                <a href="#">
+                                    <span>
+                                        <asp:Literal runat="server" ID="ltrFinanceReporting" Text="<%$ Resources:GlobalResource, mnuReporting%>"></asp:Literal>
+                                    </span>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a id="hr" href="#" onclick="show_sub_H('hr_sub', 'hr');">
+                            <i class="fa fa-users"></i>
+                            <span>
+                                <asp:Literal runat="server" ID="ltrHR" Text="<%$ Resources:GlobalResource, mnuHR%>"></asp:Literal></span>
+                            <i class="fa fa-angle-down pull-right"></i>
+                        </a>
+                        <ul class="nav nav-sub hr" id="hr_sub">
+                            <li>
+                                <a id="os" href="#" onclick="show_sub('os_sub','os');">
+                                    <span>
+                                        <asp:Literal runat="server" ID="ltrOrganizationStructure" Text="<%$ Resources:GlobalResource, mnuOrganizationStructure%>"></asp:Literal>
+                                    </span>
+                                    <i class="fa fa-angle-down pull-right"></i>
+                                </a>
+
+                                <ul class="nav nav-sub" id="os_sub">
+                                    <li>
+                                        <a id="om" href="../../../Start.aspx?stype=Organisation_Management"><span>
+                                            <asp:Literal runat="server" ID="ltrOrganizationManagement" Text="<%$ Resources:GlobalResource, mnuOrganizationManagement%>"></asp:Literal>
+                                        </span></a>
+
+
+                                        <a id="mp" href="../../../Start.aspx?stype=Positions_Management"><span>
+                                            <asp:Literal runat="server" ID="ltrManagePositions" Text="<%$ Resources:GlobalResource, mnuManagePositions%>"></asp:Literal>
+                                        </span></a>
+                                        <a id="mj" href="../../../Start.aspx?stype=Jobs_Management"><span>
+                                            <asp:Literal runat="server" ID="ltrManageJobs" Text="<%$ Resources:GlobalResource, mnuManageJobs%>"></asp:Literal>
+                                        </span></a>
+                                    </li>
+                                </ul>
+                                <a id="emd" href="#" onclick="show_sub('emd_sub','emd');">
+                                    <span>
+                                        <asp:Literal runat="server" ID="ltrEmployeeMasterData" Text="<%$ Resources:GlobalResource, mnuEmployeeMasterData%>"></asp:Literal>
+                                    </span>
+                                    <i id="emdi" class="fa fa-angle-down pull-right"></i>
+                                </a>
+                                <ul class="nav nav-sub" id="emd_sub">
+                                    <li>
+                                        <a href="#"><span>
+                                            <asp:Literal runat="server" ID="ltrNewEmployeeSetup" Text="<%$ Resources:GlobalResource, mnuNewEmployeeSetup%>"></asp:Literal>
+                                        </span></a>
+                                        <a href="#"><span>
+                                            <asp:Literal runat="server" ID="ltrEmployeePersonalDetails" Text="<%$ Resources:GlobalResource, mnuEmployeePersonalDetails%>"></asp:Literal>
+                                        </span></a>
+                                        <a href="#"><span>
+                                            <asp:Literal runat="server" ID="ltrEmployeeRequestForLetters" Text="<%$ Resources:GlobalResource, mnuEmployeeRequestForLetters%>"></asp:Literal>
+                                        </span></a>
+                                    </li>
+                                </ul>
+                                <a id="pp" href="#" onclick="show_sub('pp_sub','pp');">
+                                    <span>
+                                        <asp:Literal runat="server" ID="ltrPayrollProcess" Text="<%$ Resources:GlobalResource, mnuPayrollProcess%>"></asp:Literal>
+                                    </span>
+                                    <i class="fa fa-angle-down pull-right"></i>
+                                </a>
+                                <ul class="nav nav-sub" id="pp_sub">
+                                    <li>
+                                        <a href="#"><span>
+                                            <asp:Literal runat="server" ID="ltrRunPayroll" Text="<%$ Resources:GlobalResource, mnuRunPayroll%>"></asp:Literal>
+                                        </span></a>
+                                        <a href="#"><span>
+                                            <asp:Literal runat="server" ID="ltrAdministerPayElements" Text="<%$ Resources:GlobalResource, mnuAdministerPayElements%>"></asp:Literal>
+                                        </span></a>
+                                    </li>
+                                </ul>
+                                <a href="#"><span>
+                                    <asp:Literal runat="server" ID="ltrProcurementReporting" Text="<%$ Resources:GlobalResource, mnuReporting%>"></asp:Literal>
+                                </span></a>
+                            </li>
+                        </ul>
+                    </li>
+
+                    <li>
+                        <a id="procurement" href="#" onclick="show_sub_P('proc_sub','procurement');">
+                            <i class="fa fa-truck"></i>
+                            <span>
+                                <asp:Literal runat="server" ID="ltrProcurement" Text="<%$ Resources:GlobalResource, mnuProcurement%>"></asp:Literal></span>
+                            <i class="fa fa-angle-down pull-right"></i>
+                        </a>
+                        <ul class="nav nav-sub proc" id="proc_sub">
+                            <li>
+                                <%--<a id="smcm" href="#" onclick="show_sub('smcm_sub','smcm');">
+                                    <span>
+                                        <asp:Literal runat="server" ID="ltrSupplierManagement" Text="<%$ Resources:GlobalResource, mnuSupplierManagement%>"></asp:Literal>
+                                    </span>
+                                    <i class="fa fa-angle-down pull-right"></i>
+                                </a>
+                                <ul class="nav nav-sub" id="smcm_sub">
+                                    <li>
+                                        <a href="#"><span>
+                                            <asp:Literal runat="server" ID="ltrSupplierCreation" Text="<%$ Resources:GlobalResource, mnuSupplierCreation%>"></asp:Literal>
+                                        </span></a>
+                                        <a href="#"><span>
+                                            <asp:Literal runat="server" ID="ltrSupplierMaintenance" Text="<%$ Resources:GlobalResource, mnuSupplierMaintenance%>"></asp:Literal>
+                                        </span></a>
+                                    </li>
+                                </ul>--%>
+                                <a id="copr" href="#" onclick="show_sub('copr_sub','copr');">
+                                    <span>
+                                        <asp:Literal runat="server" ID="ltrPRManagement" Text="<%$ Resources:GlobalResource, mnuPRManagement%>"></asp:Literal>
+                                    </span>
+                                    <i class="fa fa-angle-down pull-right"></i>
+                                </a>
+                                <ul class="nav nav-sub" id="copr_sub">
+                                    <li>
+                                        <a id="POCreation" href="../../../Start.aspx?stype=PO"><span>
+                                            <asp:Literal runat="server" ID="ltrPRCreation" Text="<%$ Resources:GlobalResource, mnuPRCreation%>"></asp:Literal>
+                                        </span></a>
+                                        <a href="#"><span>
+                                            <asp:Literal runat="server" ID="ltrPRApproval" Text="<%$ Resources:GlobalResource, mnuPRApproval%>"></asp:Literal>
+                                        </span></a>
+                                    </li>
+                                </ul>
+                               <%-- <a id="pop" href="#" onclick="show_sub('pop_sub','pop');">
+                                    <span>
+                                        <asp:Literal runat="server" ID="ltrPOManagement" Text="<%$ Resources:GlobalResource, mnuPOManagement%>"></asp:Literal>
+                                    </span>
+                                    <i class="fa fa-angle-down pull-right"></i>
+                                </a>
+                                <ul class="nav nav-sub" id="pop_sub">
+                                    <li>
+                                        <a href="#"><span>
+                                            <asp:Literal runat="server" ID="ltrPOCreation" Text="<%$ Resources:GlobalResource, mnuPOCreation%>"></asp:Literal>
+                                        </span></a>
+                                        <a href="#"><span>
+                                            <asp:Literal runat="server" ID="ltrPOApproval" Text="<%$ Resources:GlobalResource, mnuPOApproval%>"></asp:Literal>
+                                        </span></a>
+                                    </li>
+                                </ul>--%>
+                                <a id="rgs" href="#" onclick="show_sub('rgs_sub','rgs');">
+                                    <span>
+                                        <asp:Literal runat="server" ID="ltrGoodsOrServicesManagement" Text="<%$ Resources:GlobalResource, mnuGoodsOrServicesManagement%>"></asp:Literal>
+                                    </span>
+                                    <i class="fa fa-angle-down pull-right"></i>
+                                </a>
+                                <ul class="nav nav-sub" id="rgs_sub">
+                                    <li>
+                                        <a href="#"><span>
+                                            <asp:Literal runat="server" ID="ltrReceiveGoodOrServices" Text="<%$ Resources:GlobalResource, mnuReceiveGoodOrServices%>"></asp:Literal>
+                                        </span></a>
+                                        <a href="#"><span>
+                                            <asp:Literal runat="server" ID="ltrUnderDelivery" Text="<%$ Resources:GlobalResource, mnuUnderDelivery%>"></asp:Literal>
+                                        </span></a>
+                                        <a href="#"><span>
+                                            <asp:Literal runat="server" ID="ltrOverDelivery" Text="<%$ Resources:GlobalResource, mnuOverDelivery%>"></asp:Literal>
+                                        </span></a>
+                                    </li>
+                                </ul>
+                                <a id="ipr" href="#" onclick="show_sub('ipr_sub','ipr');">
+                                    <span>
+                                        <asp:Literal runat="server" ID="ltrInvoiceManagement" Text="<%$ Resources:GlobalResource, mnuInvoiceManagement%>"></asp:Literal>
+                                    </span>
+                                    <i class="fa fa-angle-down pull-right"></i>
+                                </a>
+                                <ul class="nav nav-sub" id="ipr_sub">
+                                    <li>
+                                        <a href="#"><span>
+                                            <asp:Literal runat="server" ID="ltrInvoiceProcessing" Text="<%$ Resources:GlobalResource, mnuInvoiceProcessing%>"></asp:Literal>
+                                        </span></a>
+                                        <a href="#"><span>
+                                            <asp:Literal runat="server" ID="ltrInvoiceProcessingVerification" Text="<%$ Resources:GlobalResource, mnuInvoiceProcessingVerification%>"></asp:Literal>
+                                        </span></a>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a id="reporting" href="#" onclick="show_sub_R('rpt_sub','reporting');">
+                            <i class="fa fa-files-o"></i><span>
+                                <asp:Literal runat="server" ID="ltrMainReporting" Text="<%$ Resources:GlobalResource, mnuMainReporting%>"></asp:Literal></span>
+                            <i class="fa fa-angle-down pull-right"></i>
+                        </a>
+                        <ul class="nav nav-sub repo" id="rpt_sub">
+                            <li>
+                                <a id="bls" href="#" onclick="show_sub('bls_sub','bls');">
+                                    <span>
+                                        <asp:Literal runat="server" ID="ltrBalanceSheet" Text="<%$ Resources:GlobalResource, mnuBalanceSheet%>"></asp:Literal>
+                                    </span>
+                                    <i class="fa fa-angle-down pull-right"></i>
+                                </a>
+                                <ul class="nav nav-sub" id="bls_sub">
+                                    <li>
+                                        <a id="wuSupplierMasters" href="../../../Start.aspx?stype=SupplierMasters"><span>
+                                            <asp:Literal runat="server" ID="ltrSupplierMastersReport" Text="<%$ Resources:GlobalResource, mnuSupplierMastersReport%>"></asp:Literal>
+                                        </span></a>
+                                        <a href="#"><span>
+                                            <asp:Literal runat="server" ID="ltrSupplierDocumentReport" Text="<%$ Resources:GlobalResource, mnuSupplierDocumentReport%>"></asp:Literal>
+                                        </span></a>
+                                        <a href="#"><span>
+                                            <asp:Literal runat="server" ID="ltrSupplierAgingReport" Text="<%$ Resources:GlobalResource, mnuSupplierAgingReport%>"></asp:Literal>
+                                        </span></a></li>
+                                </ul>
+                                <a id="ism" href="#" onclick="show_sub('ism_sub','ism');">
+                                    <span>
+                                        <asp:Literal runat="server" ID="ltrIncomeStatement" Text="<%$ Resources:GlobalResource, mnuIncomeStatement%>"></asp:Literal>
+                                    </span>
+                                    <i class="fa fa-angle-down pull-right"></i>
+                                </a>
+                                <ul class="nav nav-sub" id="ism_sub">
+                                    <li>
+                                        <a href="#"><span>
+                                            <asp:Literal runat="server" ID="ltrCustomerMasterReport" Text="<%$ Resources:GlobalResource, mnuCustomerMasterReport%>"></asp:Literal>
+                                        </span></a>
+                                        <a href="#"><span>
+                                            <asp:Literal runat="server" ID="ltrCustomerDocumentReport" Text="<%$ Resources:GlobalResource, mnuCustomerDocumentReport%>"></asp:Literal>
+                                        </span></a>
+                                        <a href="#"><span>
+                                            <asp:Literal runat="server" ID="ltrCustomerAgingReport" Text="<%$ Resources:GlobalResource, mnuCustomerAgingReport%>"></asp:Literal>
+                                        </span></a>
+                                    </li>
+                                </ul>
+                                <a id="gld" href="#" onclick="show_sub('gld_sub','gld');">
+                                    <span>
+                                        <asp:Literal runat="server" ID="ltrGLDocuments" Text="<%$ Resources:GlobalResource, mnuGLDocuments%>"></asp:Literal>
+                                    </span>
+                                    <i class="fa fa-angle-down pull-right"></i>
+                                </a>
+                                <ul class="nav nav-sub" id="gld_sub">
+                                    <li>
+                                        <a href="#"><span>
+                                            <asp:Literal runat="server" ID="ltrEmployeeMastersReport" Text="<%$ Resources:GlobalResource, mnuEmployeeMastersReport%>"></asp:Literal>
+                                        </span></a>
+                                        <a href="#"><span>
+                                            <asp:Literal runat="server" ID="ltrEmployeeDocumentReport" Text="<%$ Resources:GlobalResource, mnuEmployeeDocumentReport%>"></asp:Literal>
+                                        </span></a>
+                                    </li>
+                                </ul>
+                                <a id="glm" href="#" onclick="show_sub('glm_sub','glm');">
+                                    <span>
+                                        <asp:Literal runat="server" ID="ltrGLMastersReport" Text="<%$ Resources:GlobalResource, mnuGLMastersReport%>"></asp:Literal>
+                                    </span>
+                                    <i class="fa fa-angle-down pull-right"></i>
+                                </a>
+                                <ul class="nav nav-sub" id="glm_sub">
+                                    <li>
+                                        <a href="#"><span>
+                                            <asp:Literal runat="server" ID="ltrGLMasterListReport" Text="<%$ Resources:GlobalResource, mnuGLMasterListReport%>"></asp:Literal>
+                                        </span></a>
+                                        <a href="#"><span>
+                                            <asp:Literal runat="server" ID="ltrGLMasterDetailsReport" Text="<%$ Resources:GlobalResource, mnuGLMasterDetailsReport%>"></asp:Literal>
+                                        </span></a>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a id="syst" href="#" onclick="show_sub_S('sys_sub','syst');">
+                            <i class="fa fa-gears"></i>
+                            <span>
+                                <asp:Literal runat="server" ID="ltrSystemSettings" Text="<%$ Resources:GlobalResource, mnuSystemSettings%>"></asp:Literal></span>
+                            <i class="fa fa-angle-down pull-right"></i>
+                        </a>
+                        <ul class="nav nav-sub sys" id="sys_sub">
+                            <li>
+                                <a id="org" href="../../../Start.aspx?stype=Organisation"><span>
+                                    <asp:Literal runat="server" ID="ltrOrganization" Text="<%$ Resources:GlobalResource, mnuOrganization%>"></asp:Literal>
+                                </span></a>
+                            </li>
+                            <li>
+                                <a id="GLAct" href="../../../Start.aspx?stype=GLAccountFormat"><span>
+                                    <asp:Literal runat="server" ID="ltrGLAccountFormat" Text="<%$ Resources:GlobalResource, mnuGLAccountFormat%>"></asp:Literal>
+                                </span></a>
+                            </li>
+                            <li>
+                                <a id="bnk" href="../../../Start.aspx?stype=BankingSetup">
+                                    <span>
+                                        <asp:Literal runat="server" ID="ltrBanking" Text="<%$ Resources:GlobalResource, mnuSystemBankingSetup%>"></asp:Literal>
+
+                                    </span></a>
+                            </li>
+
+                            <li>
+                                <a id="oth" href="../../../Start.aspx?stype=Others_Setup">
+                                    <span>
+                                        <asp:Literal runat="server" ID="ltrOthers_Setup" Text="<%$ Resources:GlobalResource, mnuOthers_Setup%>"></asp:Literal>
+
+                                    </span></a>
+                            </li>
+
+                        </ul>
+
+                    </li>
+                    <li>
+                        <a id="security" href="#" onclick="show_sub_Sec('security_sub','security');">
+                            <i class="fa fa-key"></i>
+                            <span>
+                                <asp:Literal runat="server" ID="ltrSystemSecurity" Text="<%$ Resources:GlobalResource, mnuSystemSecurity%>"></asp:Literal></span>
+                            <i class="fa fa-angle-down pull-right"></i>
+                        </a>
+                        <ul class="nav nav-sub sec" id="security_sub">
+                            <li>
+                                <a id="sysuser" href="../../../System_Security/SystemUser/SystemUserList.aspx">
+                                    <span>
+                                        <asp:Literal runat="server" ID="ltrSystemUser" Text="<%$ Resources:GlobalResource, mnuSystemUser%>"></asp:Literal>
+                                    </span>
+                                </a>
+                            </li>
+                            <li>
+                                <a id="pagemap" href="../../../System_Security/PageMapping/PageMappingList.aspx">
+                                    <span>
+                                        <asp:Literal runat="server" ID="ltrPageMapping" Text="<%$ Resources:GlobalResource, mnuPageMapping%>"></asp:Literal>
+                                    </span>
+                                </a>
+                            </li>
+                            <li>
+                                <a id="secprofile" href="../../../System_Security/SecurityProfile/SecurityProfileList.aspx">
+                                    <span>
+                                        <asp:Literal runat="server" ID="ltrSecurityProfile" Text="<%$ Resources:GlobalResource, mnuSecurityProfile%>"></asp:Literal>
+                                    </span>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </aside>
+            <div id="client_logo">
+                <img alt="space_for_logo" src="../../../images/infrability.png" height="50" />
+            </div>
+            <div id="wrapper" runat="server" style="display: none;">
+                <div id="sidebar-wrapper">
+                    <div class="btn-group-vertical btn-block" role="group" aria-label="...">
+                        <a href="#" class="btn btn-success" style="width: 170px; cursor: default;">
+                            <span class="fa fa-filter fapadrhs"></span>FILTERS<span class="fa fa-caret-down fapadrhs2"></span>
+                        </a>
+                        <asp:Button runat="server" ID="btnPrint" class="btn btn-default btn-block" Text="<%$ Resources:GlobalResource, AddionalOptionPrint%>"></asp:Button>
+                    </div>
+                </div>
+            </div>
+            <!--sidebar end-->
+            <asp:ContentPlaceHolder ID="PageContent" runat="server">
+                <!--page content start-->
+            </asp:ContentPlaceHolder>
+
+            <!--footer start-->
+            <div id="footer" class="ui-footer">
+                <asp:Label runat="server" ID="lblCopyRightYear"></asp:Label>
+                <asp:Label runat="server" ID="lblCopyRightText" Text="<%$ Resources:GlobalResource, lblCopyRightText%>"></asp:Label>
+            </div>
+            <!--footer end-->
+
+            <!-- inject:js -->
+            <script src="../../../infra_ui/js/NavMenu.js"></script>
+            <script src="../../../infra_components/jquery/dist/jquery.min.js"></script>
+            <script src="../../../infra_components/bootstrap/dist/js/bootstrap.min.js"></script>
+            <script src="../../../infra_components/jquery.nicescroll/dist/jquery.nicescroll.min.js"></script>
+            <script src="../../../infra_components/autosize/dist/autosize.min.js"></script>
+            <script src="../../../infra_ui/js/jquery.js"></script>
+            <!-- endinject -->
+
+            <!-- Common Script   -->
+            <script src="../../../infra_ui/js/main.js"></script>
+        </div>
+    </form>
+</body>
+</html>

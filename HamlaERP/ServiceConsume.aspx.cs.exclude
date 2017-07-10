@@ -1,0 +1,24 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using System.Web.UI;
+using System.Web.UI.WebControls;
+using InfrERPWS;
+public partial class ServiceConsume : System.Web.UI.Page
+{
+    InfrERPWS.AuditWS auditWSSoapClient = new AuditWS();
+    int a, b, c;
+    protected void Page_Load(object sender, EventArgs e)
+    {
+        
+    }
+
+    protected void btnSubmit_Click(object sender, EventArgs e)
+    {
+        a = Convert.ToInt32(txtNum1.Text);
+        b = Convert.ToInt32(txtNum2.Text);
+        c = auditWSSoapClient.Add(a, b);
+        lblResult.Text = c.ToString();      
+    }
+}

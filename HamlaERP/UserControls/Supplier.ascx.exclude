@@ -1,0 +1,22 @@
+﻿<%@ Control Language="C#" AutoEventWireup="true" CodeFile="Supplier.ascx.cs" Inherits="usercontrols_Supplier" %>
+
+<div class="row" style="margin-top: 100px;">
+    <div class="col-md-2"></div>
+    <div class="col-md-3 startimg slideDown">
+        <img src="../images/supplier.png" height="290" /></div>
+    <div class="col-md-5">
+        <div class="jumbotron slideUp">
+            <div style="font-size: 25pt; color: #333; margin-bottom: -40px;">Add your</div>
+            <br />
+            <div style="font-size: 38pt; font-weight: bold; color: #e26f63;">SUPPLIERS</div>
+            <p>Start with creating your application, add all details related to your supplier. You can also update and delete information.</p>
+            .
+            <p>
+                <a class="btn btn-success btn-md" href="Finance/Accounts_Payable/Supplier_Master_Creation/SupplierForm.aspx" role="button">New</a>
+                <a class="btn btn-success btn-md" href="Finance/Accounts_Payable/Supplier_Master_Creation/SupplierList.aspx" role="button">View</a>
+
+            </p>
+        </div>
+    </div>
+    <div class="col-md-2"></div>
+</div>

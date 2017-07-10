@@ -1,0 +1,298 @@
+﻿using System;
+using System.Web;
+using System.Web.UI;
+using System.Web.UI.WebControls;
+using System.Data;
+using Finware;
+using log4net;
+
+public partial class Reporting_Balance_Sheet_Supplier_Masters_FiscalPeriodSetupForm : PageBase
+{
+    #region Data Members
+    protected static readonly ILog log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+    LogExceptionUI logExcpUIobj = new LogExceptionUI();
+    LogException logExcpDALobj = new LogException();
+
+    FiscalPeriodSetupFormBAL fiscalPeriodSetupFormBAL = new FiscalPeriodSetupFormBAL();
+    FiscalPeriodSetupFormUI fiscalPeriodSetupFormUI = new FiscalPeriodSetupFormUI();
+    OptionSetListBAL optionSetListBAL = new OptionSetListBAL();
+
+
+    FiscalPeriodDetailsListBAL fiscalPeriodDetailsListBAL = new FiscalPeriodDetailsListBAL();
+    FiscalPeriodDetailsListUI fiscalPeriodDetailsListUI = new FiscalPeriodDetailsListUI();
+
+    #endregion Data Members
+
+    #region Events
+    protected override void Page_Load(object sender, EventArgs e)
+    {
+        FiscalPeriodSetupFormUI fiscalPeriodSetupFormUI = new FiscalPeriodSetupFormUI();
+
+        if (!Page.IsPostBack)
+        {
+            if (Request.QueryString["FiscalPeriodSetupId"] != null)
+            {
+                fiscalPeriodSetupFormUI.Tbl_FiscalPeriodSetupId = Request.QueryString["FiscalPeriodSetupId"];
+
+                BindYearDropDownList();
+                FillForm(fiscalPeriodSetupFormUI);
+
+                btnSave.Visible = false;
+                btnClear.Visible = false;
+                btnUpdate.Visible = true;
+                btnDelete.Visible = true;
+                lblHeading.Text = "Update FiscalPeriodSetup";
+            }
+            else
+            {
+
+                BindYearDropDownList();
+
+                btnSave.Visible = true;
+                btnClear.Visible = true;
+                btnUpdate.Visible = false;
+                btnDelete.Visible = false;
+                lblHeading.Text = "Add New FiscalPeriodSetup";
+            }
+        }
+    }
+
+    protected void btnSave_Click(object sender, EventArgs e)
+    {
+        try
+        {
+
+            fiscalPeriodSetupFormUI.CreatedBy = SessionContext.UserGuid;
+            fiscalPeriodSetupFormUI.Tbl_OrganizationId = SessionContext.OrganizationId;
+
+            fiscalPeriodSetupFormUI.Opt_Year = int.Parse(ddlOpt_Year.SelectedValue.ToString());
+            fiscalPeriodSetupFormUI.FirstDayDate = Convert.ToDateTime(txtFirstDate.Text);
+            fiscalPeriodSetupFormUI.LastDayDate = Convert.ToDateTime(txtLastDate.Text);
+            if (chckHistoricalYear.Checked == true)
+                fiscalPeriodSetupFormUI.HistoricalYear = true;
+            else
+                fiscalPeriodSetupFormUI.HistoricalYear = false;
+            fiscalPeriodSetupFormUI.NumberOfPeriod = Convert.ToInt32(txtNumberOfPeriod.Text);
+
+
+            if (fiscalPeriodSetupFormBAL.AddFiscalPeriodSetup(fiscalPeriodSetupFormUI) == 1)
+            {
+                divSuccess.Visible = true;
+                divError.Visible = false;
+                lblSuccess.Text = Resources.GlobalResource.msgRecordInsertedSuccessfully;
+                this.Page.ClientScript.RegisterStartupScript(this.GetType(), "clearform", "ClearForm();", true);
+            }
+            else
+            {
+
+                divError.Visible = true;
+                divSuccess.Visible = false;
+                lblError.Text = Resources.GlobalResource.msgCouldNotInsertRecord;
+                this.Page.ClientScript.RegisterStartupScript(this.GetType(), "clearform", "ClearForm();", true);
+            }
+
+        }
+        catch (Exception exp)
+        {
+            logExcpUIobj.MethodName = "btnSave_Click()";
+            logExcpUIobj.ResourceName = "Reporting_Balance_Sheet_Supplier_Masters_FiscalPeriodSetupForm.CS";
+            logExcpUIobj.RecordId = "New Record";
+            logExcpUIobj.ExceptionDetails = "Error Occured. System Generated Error is: " + exp.ToString();
+            logExcpDALobj.SaveExceptionToDB(logExcpUIobj);
+
+            log.Error("[Reporting_Balance_Sheet_Supplier_Masters_FiscalPeriodSetupForm : btnSave_Click] An error occured in the processing of Record Details : [" + exp.ToString() + "]");
+        }
+    }
+
+    protected void btnUpdate_Click(object sender, EventArgs e)
+    {
+        try
+        {
+            fiscalPeriodSetupFormUI.Tbl_FiscalPeriodSetupId = Request.QueryString["FiscalPeriodSetupId"];
+            fiscalPeriodSetupFormUI.ModifiedBy = SessionContext.UserGuid;
+            fiscalPeriodSetupFormUI.Tbl_OrganizationId = SessionContext.OrganizationId;
+            fiscalPeriodSetupFormUI.Opt_Year = int.Parse(ddlOpt_Year.SelectedValue.ToString());
+            fiscalPeriodSetupFormUI.FirstDayDate = Convert.ToDateTime(txtFirstDate.Text);
+            fiscalPeriodSetupFormUI.LastDayDate = Convert.ToDateTime(txtLastDate.Text);
+            if (chckHistoricalYear.Checked == true)
+                fiscalPeriodSetupFormUI.HistoricalYear = true;
+            else
+                fiscalPeriodSetupFormUI.HistoricalYear = false;
+            fiscalPeriodSetupFormUI.NumberOfPeriod = Convert.ToInt32(txtNumberOfPeriod.Text);
+
+
+            if (fiscalPeriodSetupFormBAL.UpdateFiscalPeriodSetup(fiscalPeriodSetupFormUI) == 1)
+            {
+                divSuccess.Visible = true;
+                divError.Visible = false;
+                lblSuccess.Text = Resources.GlobalResource.msgRecordUpdatedSuccessfully;
+                fiscalPeriodSetupFormUI.Tbl_FiscalPeriodSetupId = Request.QueryString["FiscalPeriodSetupId"];
+                BindYearDropDownList();
+                FillForm(fiscalPeriodSetupFormUI);
+            }
+            else
+            {
+                divError.Visible = true;
+                divSuccess.Visible = false;
+                lblError.Text = Resources.GlobalResource.msgCouldNotUpdateRecord;
+            }
+
+        }
+        catch (Exception exp)
+        {
+            logExcpUIobj.MethodName = "btnUpdate_Click()";
+            logExcpUIobj.ResourceName = "Reporting_Balance_Sheet_Supplier_Masters_FiscalPeriodSetupForm.CS";
+            logExcpUIobj.RecordId = "";
+            logExcpUIobj.ExceptionDetails = "Error Occured. System Generated Error is: " + exp.ToString();
+            logExcpDALobj.SaveExceptionToDB(logExcpUIobj);
+
+            log.Error("[Reporting_Balance_Sheet_Supplier_Masters_FiscalPeriodSetupForm : btnUpdate_Click] An error occured in the processing of Record Id : " + fiscalPeriodSetupFormUI.Tbl_FiscalPeriodSetupId + ".  Details : [" + exp.ToString() + "]");
+        }
+    }
+
+    protected void btnDelete_Click(object sender, EventArgs e)
+    {
+
+        try
+        {
+            fiscalPeriodSetupFormUI.Tbl_FiscalPeriodSetupId = Request.QueryString["FiscalPeriodSetupId"];
+
+            if (fiscalPeriodSetupFormBAL.DeleteFiscalPeriodSetup(fiscalPeriodSetupFormUI) == 1)
+            {
+                divSuccess.Visible = true;
+                divError.Visible = false;
+                lblSuccess.Text = Resources.GlobalResource.msgRecordDeleteSuccessfully;
+                this.Page.ClientScript.RegisterStartupScript(this.GetType(), "clearform", "ClearForm();", true);
+            }
+            else
+            {
+                divError.Visible = true;
+                divSuccess.Visible = false;
+                lblError.Text = Resources.GlobalResource.msgCouldNotDeleteRecord;
+                this.Page.ClientScript.RegisterStartupScript(this.GetType(), "clearform", "ClearForm();", true);
+            }
+        }
+        catch (Exception exp)
+        {
+            logExcpUIobj.MethodName = "btnDelete_Click()";
+            logExcpUIobj.ResourceName = "Reporting_Balance_Sheet_Supplier_Masters_FiscalPeriodSetupForm.CS";
+            logExcpUIobj.RecordId = fiscalPeriodSetupFormUI.Tbl_FiscalPeriodSetupId;
+            logExcpUIobj.ExceptionDetails = "Error Occured. System Generated Error is: " + exp.ToString();
+            logExcpDALobj.SaveExceptionToDB(logExcpUIobj);
+
+            log.Error("[Reporting_Balance_Sheet_Supplier_Masters_FiscalPeriodSetupForm : btnDelete_Click] An error occured in the processing of Record Id : " + fiscalPeriodSetupFormUI.Tbl_FiscalPeriodSetupId + ". Details : [" + exp.ToString() + "]");
+        }
+    }
+
+    protected void btnBack_Click(object sender, EventArgs e)
+    {
+        Response.Redirect("FiscalPeriodSetupList.aspx");
+    }
+    #endregion Events
+
+    #region Methods
+    private void FillForm(FiscalPeriodSetupFormUI fiscalPeriodSetupFormUI)
+    {
+        try
+        {
+            DataTable dtb = fiscalPeriodSetupFormBAL.GetFiscalPeriodSetupListById(fiscalPeriodSetupFormUI);
+
+            if (dtb.Rows.Count > 0)
+            {
+                ddlOpt_Year.SelectedValue = dtb.Rows[0]["Opt_Year"].ToString();
+                chckHistoricalYear.Checked = Convert.ToBoolean(dtb.Rows[0]["HistoricalYear"].ToString());
+                txtNumberOfPeriod.Text = dtb.Rows[0]["NumberOfPeriod"].ToString();
+                //FirstDayDate                    
+                //    LastDayDate
+                BindFiscalPeriod();
+            }
+            else
+            {
+                lblError.Text = Resources.GlobalResource.msgCouldNotLoadData;
+                divError.Visible = true;
+            }
+
+        }
+        catch (Exception exp)
+        {
+            logExcpUIobj.MethodName = "FillForm()";
+            logExcpUIobj.ResourceName = "Reporting_Balance_Sheet_Supplier_Masters_FiscalPeriodSetupForm.CS";
+            logExcpUIobj.RecordId = fiscalPeriodSetupFormUI.Tbl_FiscalPeriodSetupId;
+            logExcpUIobj.ExceptionDetails = "Error Occured. System Generated Error is: " + exp.ToString();
+            logExcpDALobj.SaveExceptionToDB(logExcpUIobj);
+
+            log.Error("[Reporting_Balance_Sheet_Supplier_Masters_FiscalPeriodSetupForm : FillForm] An error occured in the processing of Record Details : [" + exp.ToString() + "]");
+        }
+    }
+
+    private void BindYearDropDownList()
+    {
+        try
+        {
+            OptionSetListUI optionSetListUI = new OptionSetListUI();
+            optionSetListUI.TableName = "tbl_FiscalPeriodSetup";
+            optionSetListUI.OptionSetName = "Opt_Year";
+            DataTable dtb = optionSetListBAL.GetOptionSetListByOptionSetName(optionSetListUI);
+            if (dtb.Rows.Count > 0)
+            {
+
+                ddlOpt_Year.DataSource = dtb;
+                ddlOpt_Year.DataBind();
+                ddlOpt_Year.DataTextField = "OptionSetLable";
+                ddlOpt_Year.DataValueField = "OptionSetValue";
+                ddlOpt_Year.DataBind();
+            }
+            else
+            {
+                ddlOpt_Year.Items.Insert(0, new ListItem(Resources.GlobalResource.msgNoRecordFound, "00000000-0000-0000-0000-000000000001"));
+            }
+
+        }
+        catch (Exception exp)
+        {
+            logExcpUIobj.MethodName = "BindOriginDropDownList()";
+            logExcpUIobj.ResourceName = "Reporting_Balance_Sheet_Supplier_Masters_FiscalPeriodSetupForm.CS";
+            logExcpUIobj.RecordId = "";
+            logExcpUIobj.ExceptionDetails = "Error Occured. System Generated Error is: " + exp.ToString();
+            logExcpDALobj.SaveExceptionToDB(logExcpUIobj);
+
+            log.Error("[Reporting_Balance_Sheet_Supplier_Masters_FiscalPeriodSetupForm : BindYearDropDownList] An error occured in the processing of Record Details : [" + exp.ToString() + "]");
+        }
+
+    }
+
+    public void BindFiscalPeriod()
+    {
+        try
+        {
+            DataTable dtb = fiscalPeriodDetailsListBAL.GetFiscalPeriodDetailsList();
+
+            if (dtb.Rows.Count > 0 && dtb != null)
+            {
+                gvFiscalPeriod.DataSource = dtb;
+                gvFiscalPeriod.DataBind();
+                divError.Visible = false;
+                gvFiscalPeriod.Visible = true;
+            }
+            else
+            {
+                divError.Visible = true;
+                gvFiscalPeriod.Visible = false;
+                lblError.Text = Resources.GlobalResource.msgNoRecordFound;
+            }
+
+        }
+        catch (Exception exp)
+        {
+            logExcpUIobj.MethodName = "BindList()";
+            logExcpUIobj.ResourceName = "Reporting_Balance_Sheet_Supplier_Masters_FiscalPeriodList.CS";
+            logExcpUIobj.RecordId = "All";
+            logExcpUIobj.ExceptionDetails = "Error Occured. System Generated Error is: " + exp.ToString();
+            logExcpDALobj.SaveExceptionToDB(logExcpUIobj);
+
+            log.Error("[Reporting_Balance_Sheet_Supplier_Masters_FiscalPeriodList : BindList] An error occured in the processing of Record. Details : [" + exp.ToString() + "]");
+        }
+
+    }
+    #endregion Methods
+}

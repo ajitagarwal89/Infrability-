@@ -1,0 +1,49 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using System.Data;
+
+
+/// <summary>
+/// Summary description for FiscalPeriodSetupFormBLL
+/// </summary>
+public class FiscalPeriodSetupFormBAL
+{
+    FiscalPeriodSetupFormDAL fiscalPeriodSetupFormDAL = new FiscalPeriodSetupFormDAL();
+
+    public FiscalPeriodSetupFormBAL()
+    {
+        //
+        // TODO: Add constructor logic here
+        //
+    }
+
+    public DataTable GetFiscalPeriodSetupListById(FiscalPeriodSetupFormUI fiscalPeriodSetupFormUI)
+    {
+        DataTable dtb = new DataTable();
+        dtb = fiscalPeriodSetupFormDAL.GetFiscalPeriodSetupListById(fiscalPeriodSetupFormUI);
+        return dtb;
+    }
+
+    public int AddFiscalPeriodSetup(FiscalPeriodSetupFormUI fiscalPeriodSetupFormUI)
+    {
+        int resutl = 0;
+        resutl = fiscalPeriodSetupFormDAL.AddFiscalPeriodSetup(fiscalPeriodSetupFormUI);
+        return resutl;
+    }
+
+    public int UpdateFiscalPeriodSetup(FiscalPeriodSetupFormUI fiscalPeriodSetupFormUI)
+    {
+        int resutl = 0;
+        resutl = fiscalPeriodSetupFormDAL.UpdateFiscalPeriodSetup(fiscalPeriodSetupFormUI);
+        return resutl;
+    }
+
+    public int DeleteFiscalPeriodSetup(FiscalPeriodSetupFormUI fiscalPeriodSetupFormUI)
+    {
+        int resutl = 0;
+        resutl = fiscalPeriodSetupFormDAL.DeleteFiscalPeriodSetup(fiscalPeriodSetupFormUI);
+        return resutl;
+    }
+}
