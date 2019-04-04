@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:tns="http://tempuri.org/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" targetNamespace="http://tempuri.org/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <s:schema elementFormDefault="qualified" targetNamespace="http://tempuri.org/">
+      <s:element name="Audit_Insert">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="tbl_OrganizationId" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="tableName" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="tbl_RecordId" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="tbl_UserId" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="newValue" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="iPAddress" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="browser" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="Audit_InsertResponse">
+        <s:complexType />
+      </s:element>
+      <s:element name="Audit_Update">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="tbl_OrganizationId" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="tableName" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="tbl_RecordId" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="tbl_UserId" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="newValue" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="iPAddress" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="browser" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="Audit_UpdateResponse">
+        <s:complexType />
+      </s:element>
+      <s:element name="Audit_Delete">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="tbl_OrganizationId" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="tableName" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="tbl_RecordId" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="tbl_UserId" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="iPAddress" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="browser" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="Audit_DeleteResponse">
+        <s:complexType />
+      </s:element>
+      <s:element name="Audit_Select_Insert">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="tbl_OrganizationId" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="tableName" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="tbl_RecordId" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="tbl_UserId" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="selectedValue" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="iPAddress" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="browser" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="Audit_Select_InsertResponse">
+        <s:complexType />
+      </s:element>
+    </s:schema>
+  </wsdl:types>
+  <wsdl:message name="Audit_InsertSoapIn">
+    <wsdl:part name="parameters" element="tns:Audit_Insert" />
+  </wsdl:message>
+  <wsdl:message name="Audit_InsertSoapOut">
+    <wsdl:part name="parameters" element="tns:Audit_InsertResponse" />
+  </wsdl:message>
+  <wsdl:message name="Audit_UpdateSoapIn">
+    <wsdl:part name="parameters" element="tns:Audit_Update" />
+  </wsdl:message>
+  <wsdl:message name="Audit_UpdateSoapOut">
+    <wsdl:part name="parameters" element="tns:Audit_UpdateResponse" />
+  </wsdl:message>
+  <wsdl:message name="Audit_DeleteSoapIn">
+    <wsdl:part name="parameters" element="tns:Audit_Delete" />
+  </wsdl:message>
+  <wsdl:message name="Audit_DeleteSoapOut">
+    <wsdl:part name="parameters" element="tns:Audit_DeleteResponse" />
+  </wsdl:message>
+  <wsdl:message name="Audit_Select_InsertSoapIn">
+    <wsdl:part name="parameters" element="tns:Audit_Select_Insert" />
+  </wsdl:message>
+  <wsdl:message name="Audit_Select_InsertSoapOut">
+    <wsdl:part name="parameters" element="tns:Audit_Select_InsertResponse" />
+  </wsdl:message>
+  <wsdl:portType name="AuditWSSoap">
+    <wsdl:operation name="Audit_Insert">
+      <wsdl:input message="tns:Audit_InsertSoapIn" />
+      <wsdl:output message="tns:Audit_InsertSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="Audit_Update">
+      <wsdl:input message="tns:Audit_UpdateSoapIn" />
+      <wsdl:output message="tns:Audit_UpdateSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="Audit_Delete">
+      <wsdl:input message="tns:Audit_DeleteSoapIn" />
+      <wsdl:output message="tns:Audit_DeleteSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="Audit_Select_Insert">
+      <wsdl:input message="tns:Audit_Select_InsertSoapIn" />
+      <wsdl:output message="tns:Audit_Select_InsertSoapOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="AuditWSSoap" type="tns:AuditWSSoap">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="Audit_Insert">
+      <soap:operation soapAction="http://tempuri.org/Audit_Insert" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Audit_Update">
+      <soap:operation soapAction="http://tempuri.org/Audit_Update" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Audit_Delete">
+      <soap:operation soapAction="http://tempuri.org/Audit_Delete" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Audit_Select_Insert">
+      <soap:operation soapAction="http://tempuri.org/Audit_Select_Insert" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="AuditWSSoap12" type="tns:AuditWSSoap">
+    <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="Audit_Insert">
+      <soap12:operation soapAction="http://tempuri.org/Audit_Insert" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Audit_Update">
+      <soap12:operation soapAction="http://tempuri.org/Audit_Update" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Audit_Delete">
+      <soap12:operation soapAction="http://tempuri.org/Audit_Delete" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Audit_Select_Insert">
+      <soap12:operation soapAction="http://tempuri.org/Audit_Select_Insert" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="AuditWS">
+    <wsdl:port name="AuditWSSoap" binding="tns:AuditWSSoap">
+      <soap:address location="http://192.168.15.147:8088/AuditWS.asmx" />
+    </wsdl:port>
+    <wsdl:port name="AuditWSSoap12" binding="tns:AuditWSSoap12">
+      <soap12:address location="http://192.168.15.147:8088/AuditWS.asmx" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

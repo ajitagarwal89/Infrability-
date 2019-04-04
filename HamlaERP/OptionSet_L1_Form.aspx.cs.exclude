@@ -1,0 +1,384 @@
+﻿using System;
+using System.Web;
+using System.Web.UI;
+using System.Web.UI.WebControls;
+using System.Data;
+using Finware;
+using log4net;
+
+public partial class OptionSet_L1_Form : PageBase
+{
+    #region Data Members
+    protected static readonly ILog log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+    LogExceptionUI logExcpUIobj = new LogExceptionUI();
+    LogException logExcpDALobj = new LogException();
+
+    OptionSetFormBAL optionSetFormBAL = new OptionSetFormBAL();
+    OptionSetFormUI optionSetFormUI = new OptionSetFormUI();
+
+    OptionSetListBAL optionSetListBAL = new OptionSetListBAL();
+    OptionSetListUI optionSetListUI = new OptionSetListUI();
+
+    OptionSet_L1FormBAL optionSet_L1FormBAL = new OptionSet_L1FormBAL();
+    OptionSet_L1FormUI optionSet_L1FormUI = new OptionSet_L1FormUI();
+
+    #endregion Data Members
+
+    #region Events
+    protected override void Page_Load(object sender, EventArgs e)
+    {
+        OptionSetFormUI optionSetFormUI = new OptionSetFormUI();
+
+        if (!Page.IsPostBack)
+        {
+            if (Request.QueryString["OptionSetId"] != null || Request.QueryString["recordId"] != null)
+            {
+                optionSetFormUI.Tbl_OptionSetId = (Request.QueryString["OptionSetId"] != null ? Request.QueryString["OptionSetId"] : Request.QueryString["recordId"]);
+                BindTableDropDown();
+                FillForm(optionSetFormUI);
+
+                btnSave.Visible = false;
+                btnClear.Visible = false;
+                btnUpdate.Visible = true;
+                btnDelete.Visible = true;
+
+                lblHeading.Text = "Update Option Set";
+            }
+            else
+            {
+                BindTableDropDown();
+                btnSave.Visible = true;
+                btnClear.Visible = true;
+                btnUpdate.Visible = false;
+                btnDelete.Visible = false;
+                btnAuditHistory.Visible = false;
+
+                lblHeading.Text = "Add New Option Set";
+            }
+        }
+    }
+
+    protected void btnSave_Click(object sender, EventArgs e)
+    {
+        try
+        {
+
+            optionSet_L1FormUI.CreatedBy = SessionContext.UserGuid;
+            optionSet_L1FormUI.Tbl_OrganizationId = SessionContext.OrganizationId;
+
+            optionSet_L1FormUI.tbl_OptionSetId = ddllblOptionSet.SelectedValue;
+            optionSet_L1FormUI.OptionSetLable = txtOptionSetLable.Text;
+            optionSet_L1FormUI.OptionSetValue = txtOptionSetValue.Text;
+
+
+            if (optionSet_L1FormBAL.AddOptionSet_L1(optionSet_L1FormUI) == 1)
+            {
+                divSuccess.Visible = true;
+                lblSuccess.Text = Resources.GlobalResource.msgRecordInsertedSuccessfully;
+                this.Page.ClientScript.RegisterStartupScript(this.GetType(), "clearform", "ClearForm();", true);
+            }
+            else
+            {
+                lblError.Text = Resources.GlobalResource.msgCouldNotInsertRecord;
+                divError.Visible = true;
+                this.Page.ClientScript.RegisterStartupScript(this.GetType(), "clearform", "ClearForm();", true);
+            }
+
+        }
+        catch (Exception exp)
+        {
+            logExcpUIobj.MethodName = "btnSave_Click()";
+            logExcpUIobj.ResourceName = "System_Settings_OptionSet_OptionSet_L1_Form.CS";
+            logExcpUIobj.RecordId = "New Record";
+            logExcpUIobj.ExceptionDetails = "Error Occured. System Generated Error is: " + exp.ToString();
+            logExcpDALobj.SaveExceptionToDB(logExcpUIobj);
+
+            log.Error("[System_Settings_OptionSet_OptionSet_L1_Form : btnSave_Click] An error occured in the processing of Record Details : [" + exp.ToString() + "]");
+        }
+    }
+
+    protected void btnUpdate_Click(object sender, EventArgs e)
+    {
+        try
+        {
+            optionSet_L1FormUI.tbl_OptionSet_L1Id = Request.QueryString["OptionSet_L1Id"];
+            optionSet_L1FormUI.ModifiedBy = SessionContext.UserGuid;
+            optionSet_L1FormUI.Tbl_OrganizationId = SessionContext.OrganizationId;
+            optionSet_L1FormUI.tbl_OptionSetId = ddlOptionSetId.SelectedValue;
+            optionSet_L1FormUI.OptionSetLable = txtOptionSetLable.Text;
+            optionSet_L1FormUI.OptionSetValue = txtOptionSetValue.Text;
+
+
+            if (optionSet_L1FormBAL.AddOptionSet_L1(optionSet_L1FormUI) == 1)
+            {
+                divSuccess.Visible = true;
+                lblSuccess.Text = Resources.GlobalResource.msgRecordUpdatedSuccessfully;
+                this.Page.ClientScript.RegisterStartupScript(this.GetType(), "clearform", "ClearForm();", true);
+            }
+            else
+            {
+                lblError.Text = Resources.GlobalResource.msgCouldNotUpdateRecord;
+                divError.Visible = true;
+                this.Page.ClientScript.RegisterStartupScript(this.GetType(), "clearform", "ClearForm();", true);
+            }
+
+        }
+        catch (Exception exp)
+        {
+            logExcpUIobj.MethodName = "btnUpdate_Click()";
+            logExcpUIobj.ResourceName = "System_Settings_OptionSet_OptionSet_L1_Form.CS";
+            logExcpUIobj.RecordId = "New Record";
+            logExcpUIobj.ExceptionDetails = "Error Occured. System Generated Error is: " + exp.ToString();
+            logExcpDALobj.SaveExceptionToDB(logExcpUIobj);
+
+            log.Error("[System_Settings_OptionSet_OptionSet_L1_Form : btnUpdate_Click] An error occured in the processing of Record Details : [" + exp.ToString() + "]");
+        }
+    }
+
+    protected void btnDelete_Click(object sender, EventArgs e)
+    {
+        try
+        {
+            optionSet_L1FormUI.tbl_OptionSet_L1Id = Request.QueryString["OptionSet_L1Id"];
+
+            if (optionSet_L1FormBAL.DeleteOptionSet_L1(optionSet_L1FormUI) == 1)
+            {
+                divSuccess.Visible = true;
+                lblSuccess.Text = Resources.GlobalResource.msgRecordDeleteSuccessfully;
+                this.Page.ClientScript.RegisterStartupScript(this.GetType(), "clearform", "ClearForm();", true);
+            }
+            else
+            {
+                divError.Visible = true;
+                lblError.Text = Resources.GlobalResource.msgCouldNotDeleteRecord;
+                this.Page.ClientScript.RegisterStartupScript(this.GetType(), "clearform", "ClearForm();", true);
+            }
+        }
+        catch (Exception exp)
+        {
+            logExcpUIobj.MethodName = "btnDelete_Click()";
+            logExcpUIobj.ResourceName = "System_Settings_OptionSetForm.CS";
+            logExcpUIobj.RecordId = optionSet_L1FormUI.tbl_OptionSet_L1Id;
+            logExcpUIobj.ExceptionDetails = "Error Occured. System Generated Error is: " + exp.ToString();
+            logExcpDALobj.SaveExceptionToDB(logExcpUIobj);
+
+            log.Error("[System_Settings_OptionSetForm : btnDelete_Click] An error occured in the processing of Record Id : " + optionSet_L1FormUI.tbl_OptionSet_L1Id + ". Details : [" + exp.ToString() + "]");
+        }
+    }
+
+    protected void btnBack_Click(object sender, EventArgs e)
+    {
+        Response.Redirect("OptionSet_L1_List.aspx");
+    }
+
+    protected void btnClear_Click(object sender, EventArgs e)
+    {
+
+    }
+
+    protected void btnAuditHistory_Click(object sender, EventArgs e)
+    {
+        string Form = "~/System_Settings/OptionSet_L1_Form.aspx";
+        string recordId = Request.QueryString["OptionSet_L1Id"];
+        Response.Redirect("~/" + CommonClasses.AUDIT_HISTORY_LINK + "AuditHistoryList.aspx?recordId=" + recordId + "&Form=" + Form);
+    }
+
+    protected void ddlTables_SelectedIndexChanged(object sender, EventArgs e)
+    {
+        OptionSetListUI optionSetListUI = new OptionSetListUI();
+
+        if (ddlTables.SelectedValue == "0" || ddlTables.SelectedIndex == 0)
+        {
+            ddlColoumnByTable.SelectedIndex = 0;
+            ddloptionsetId.SelectedIndex = 0;
+            txtOptionSetLable.Text = "";
+            txtOptionSetValue.Text = "";
+        }
+
+        else
+        {
+            optionSetListUI.TableObjectId = ddlTables.SelectedValue;
+            BindOptionSetListByOptionSetName(optionSetListUI);
+        }
+    }
+
+    protected void ddlColoumnByTable_SelectedIndexChanged(object sender, EventArgs e)
+    {
+        if (ddlColoumnByTable.SelectedValue == "0" || ddlColoumnByTable.SelectedIndex == 0)
+        {
+            ddloptionsetId.SelectedIndex = 0;
+            txtOptionSetLable.Text = "";
+            txtOptionSetValue.Text = "";
+        }
+        else
+        {
+            optionSetListUI.ColumnId = ddlColoumnByTable.SelectedValue;
+            BindOptionSetListByOptionSetName(optionSetListUI);
+
+        }
+
+    }
+
+    protected void ddllblOptionSet_SelectedIndexChanged(object sender, EventArgs e)
+    {
+        if (ddllblOptionSet.SelectedValue == "0" || ddllblOptionSet.SelectedIndex == 0)
+        {
+            txtOptionSetLable.Text = "";
+            txtOptionSetValue.Text = "";
+        }
+        else
+        {
+            optionSetListUI.ColumnId = ddlColoumnByTable.SelectedValue;
+        }
+    }
+
+    #endregion Events
+
+    #region Methods
+    public void FillForm(OptionSetFormUI optionSetFormUI)
+    {
+        try
+        {
+            DataTable dtb = optionSetFormBAL.GetOptionSetListById(optionSetFormUI);
+
+            if (dtb.Rows.Count > 0)
+            {
+                string tableObjectId = dtb.Rows[0]["TableObjectId"].ToString();
+                ddlTables.SelectedValue = tableObjectId;
+                optionSetListUI.TableObjectId = tableObjectId;
+                txtTableObjectId.Text = tableObjectId;
+                txtTableName.Text = dtb.Rows[0]["TableName"].ToString();
+
+
+                BindColumnByTablesDropDown(optionSetListUI);
+                string columnObjectId = dtb.Rows[0]["ColumnId"].ToString();
+                ddlColoumnByTable.SelectedValue = columnObjectId;
+                txtColumn.Text = columnObjectId;
+                txtOptionSetName.Text = dtb.Rows[0]["OptionSetName"].ToString();
+
+                txtOptionSetLable.Text = dtb.Rows[0]["OptionSetLable"].ToString();
+                txtOptionSetValue.Text = dtb.Rows[0]["OptionSetValue"].ToString();
+
+            }
+            else
+            {
+                lblError.Text = Resources.GlobalResource.msgCouldNotLoadData;
+                divError.Visible = true;
+            }
+
+        }
+        catch (Exception exp)
+        {
+            logExcpUIobj.MethodName = "FillForm()";
+            logExcpUIobj.ResourceName = "System_Settings_OptionSetForm.CS";
+            logExcpUIobj.RecordId = optionSetFormUI.Tbl_OptionSetId;
+            logExcpUIobj.ExceptionDetails = "Error Occured. System Generated Error is: " + exp.ToString();
+            logExcpDALobj.SaveExceptionToDB(logExcpUIobj);
+
+            log.Error("[System_Settings_OptionSetForm : FillForm] An error occured in the processing of Record Id : " + optionSetFormUI.Tbl_OptionSetId + ". Details : [" + exp.ToString() + "]");
+        }
+    }
+
+    public void BindTableDropDown()
+    {
+        try
+        {
+            DataTable dtb = optionSetListBAL.GetTableList();
+
+            if (dtb.Rows.Count > 0)
+            {
+                ddlTables.DataSource = dtb;
+
+                ddlTables.DataTextField = "NAME";
+                ddlTables.DataValueField = "OBJECT_ID";
+                ddlTables.DataBind();
+                ddlTables.Items.Insert(0, new ListItem(Resources.GlobalResource.msgSelectRecord, "0"));
+            }
+            else
+            {
+                ddlTables.Items.Insert(0, new ListItem(Resources.GlobalResource.msgNoRecordFound, "00000000-0000-0000-0000-000000000001"));
+            }
+
+        }
+        catch (Exception exp)
+        {
+            logExcpUIobj.MethodName = "BindOrganizationTypeDropDown()";
+            logExcpUIobj.ResourceName = "System_Settings_OptionSetForm.CS";
+            logExcpUIobj.RecordId = "";
+            logExcpUIobj.ExceptionDetails = "Error Occured. System Generated Error is: " + exp.ToString();
+            logExcpDALobj.SaveExceptionToDB(logExcpUIobj);
+
+            log.Error("[System_Settings_OptionSetForm : BindColumnByTablesDropDown] An error occured in the processing of Record Details : [" + exp.ToString() + "]");
+        }
+    }
+
+    public void BindColumnByTablesDropDown(OptionSetListUI optionSetListUI)
+    {
+        try
+        {
+            DataTable dtb = optionSetListBAL.GetColumnByTablesList(optionSetListUI);
+
+            if (dtb.Rows.Count > 0)
+            {
+                ddlColoumnByTable.DataSource = dtb;
+
+                ddlColoumnByTable.DataTextField = "ColumnName";
+                ddlColoumnByTable.DataValueField = "Column_Id";
+                ddlColoumnByTable.DataBind();
+                ddlColoumnByTable.Items.Insert(0, new ListItem(Resources.GlobalResource.msgSelectRecord, "0"));
+            }
+            else
+            {
+                ddlColoumnByTable.Items.Insert(0, new ListItem(Resources.GlobalResource.msgNoRecordFound, "00000000-0000-0000-0000-000000000001"));
+            }
+
+        }
+        catch (Exception exp)
+        {
+            logExcpUIobj.MethodName = "BindOrganizationTypeDropDown()";
+            logExcpUIobj.ResourceName = "System_Settings_OptionSetForm.CS";
+            logExcpUIobj.RecordId = "";
+            logExcpUIobj.ExceptionDetails = "Error Occured. System Generated Error is: " + exp.ToString();
+            logExcpDALobj.SaveExceptionToDB(logExcpUIobj);
+
+            log.Error("[System_Settings_OptionSetForm : BindColumnByTablesDropDown] An error occured in the processing of Record Details : [" + exp.ToString() + "]");
+        }
+    }
+
+    public void BindOptionSetListByOptionSetName(OptionSetListUI optionSetListUI)
+    {
+        try
+        {
+            DataTable dtb = optionSetListBAL.GetOptionSetListByOptionSetName(optionSetListUI);
+
+            if (dtb.Rows.Count > 0)
+            {
+                ddllblOptionSet.DataSource = dtb;
+
+                ddllblOptionSet.DataTextField = "ColumnName";
+                ddllblOptionSet.DataValueField = "Column_Id";
+                ddllblOptionSet.DataBind();
+                ddllblOptionSet.Items.Insert(0, new ListItem(Resources.GlobalResource.msgSelectRecord, "0"));
+            }
+            else
+            {
+                ddllblOptionSet.Items.Insert(0, new ListItem(Resources.GlobalResource.msgNoRecordFound, "00000000-0000-0000-0000-000000000001"));
+            }
+
+        }
+        catch (Exception exp)
+        {
+            logExcpUIobj.MethodName = "BindOrganizationTypeDropDown()";
+            logExcpUIobj.ResourceName = "System_Settings_OptionSetForm.CS";
+            logExcpUIobj.RecordId = "";
+            logExcpUIobj.ExceptionDetails = "Error Occured. System Generated Error is: " + exp.ToString();
+            logExcpDALobj.SaveExceptionToDB(logExcpUIobj);
+
+            log.Error("[System_Settings_OptionSetForm : BindColumnByTablesDropDown] An error occured in the processing of Record Details : [" + exp.ToString() + "]");
+        }
+    }
+
+    #endregion Methods
+
+
+}

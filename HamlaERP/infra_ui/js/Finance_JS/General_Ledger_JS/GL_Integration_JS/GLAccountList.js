@@ -1,0 +1,67 @@
+﻿$('#sidebar-wrapper').on('click', function () {
+    $(this).toggleClass('sidebar-open');
+});
+
+function setDetails(accountNumber, glaccountCategory, lblGvRowId) {
+
+
+    document.getElementById("lblAccountNumber").innerHTML = accountNumber;
+    document.getElementById("lblGLAccountCategory").innerHTML = glaccountCategory;
+    document.getElementById("lblGvRowId").innerHTML = lblGvRowId;
+    var maxrows = document.getElementById('gvData').rows.length - 1;
+    var num = document.getElementById('lblGvRowId').innerHTML.split('_');
+    if (num[1] == maxrows) {
+        document.getElementById('next').class = 'btn btn-default disabled';
+    }
+    else {
+        document.getElementById('next').class = 'btn btn-default';
+    }
+    if (num[1] == 1) {
+        document.getElementById('prev').class = 'btn btn-default disabled';
+    }
+    else {
+        document.getElementById('prev').class = 'btn btn-default';
+    }
+}
+
+function showNextRecord() {
+    var id = document.getElementById('lblGvRowId').innerHTML.split('_');
+    var lnk = parseInt(id[1]) + 1;
+
+    document.getElementById('lnkViewNextPrev_' + lnk).click();
+}
+
+function showPrevRecord() {
+    var id = document.getElementById('lblGvRowId').innerHTML.split('_');
+    var lnk = parseInt(id[1]) - 1;
+
+    document.getElementById('lnkViewNextPrev_' + lnk).click();
+}
+
+function CallMainSearch() {
+    document.getElementById("btnMainSearch").click();
+}
+
+function ClearMainSearch() {
+    document.getElementById("btnClearMainSearch").click();
+}
+function checkAll(objRef) {
+    var GridView = objRef.parentNode.parentNode.parentNode;
+    var inputList = GridView.getElementsByTagName("input");
+    for (var i = 0; i < inputList.length; i++) {
+        
+        var row = inputList[i].parentNode.parentNode;
+        if (inputList[i].type == "checkbox" && objRef != inputList[i]) {
+            if (objRef.checked) {
+                
+                inputList[i].checked = true;
+            }
+            else {
+               
+                
+                inputList[i].checked = false;
+            }
+        }
+    }
+}
+

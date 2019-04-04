@@ -1,0 +1,17 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+
+/// <summary>
+/// Summary description for GLAccountSetupForm
+/// </summary>
+public class GLAccountSetupForm
+{
+    public GLAccountSetupForm()
+    {
+        //
+        // TODO: Add constructor logic here
+        //
+    }
+}

@@ -1,0 +1,30 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+
+/// <summary>
+/// Summary description for AssetBookSetupListUI
+/// </summary>
+public class AssetBookSetupListUI
+{
+    public AssetBookSetupListUI()
+    {
+        //
+        // TODO: Add constructor logic here
+        //
+    }
+    public string Tbl_AssetBookSetupId { get; set; }
+    public DateTime CreatedOn { get; set; }
+    public Int64 CreatedOn_Hijri { get; set; }
+    public string CreatedBy { get; set; }
+    public DateTime ModifiedOn { get; set; }
+    public Int64 ModifiedOn_Hijri { get; set; }
+    public string ModifiedBy { get; set; }
+    public string Tbl_OrganizationId { get; set; }
+    public string AssetBookSetupCode { get; set; }
+    public string Description { get; set; }
+    public int opt_CurrentyFiscalYear { get; set; }
+    public int opt_DepreciatedPeriod { get; set; }
+    public string Search { get; set; }
+}
